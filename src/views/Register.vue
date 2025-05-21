@@ -1,6 +1,89 @@
-<script setup>
+<script>
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
+import { auth, db } from '../firebase/firebaseConfig'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { storage } from '../firebase/firebaseConfig'
+
+
+
+export default {
+  name: 'Register',
+  components: {
+    Navbar,
+    Footer
+  },
+  data() {
+    return {
+      firstName: '',
+      lastName: '',
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      bio: '',
+      file: null,
+      error: null,
+      errorMsg: '',
+
+    };
+  },
+  methods:{
+    handleFileChange(e) {
+      this.file = e.target.files[0]
+    },
+    async register() {
+      try {
+      if (
+          this.firstName &&
+          this.lastName &&
+          this.username &&
+          this.email &&
+          this.password &&
+          this.confirmPassword &&
+          this.bio
+      ) {
+        this.error = false
+        this.errorMsg = ''
+
+        const userCred = await createUserWithEmailAndPassword(
+            auth,
+            this.email,
+            this.password
+        )
+
+        let avatarURL = ''
+        if (this.file) {
+          const filePath = `avatars/${userCred.user.uid}/${this.file.name}`
+          const fileRef = storageRef(storage, filePath)
+          await uploadBytes(fileRef, this.file)
+          avatarURL = await getDownloadURL(fileRef)
+
+        }
+
+        await setDoc(doc(db, 'users', userCred.user.uid), {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          username: this.username,
+          email: this.email,
+          bio: this.bio,
+          avatarURL: avatarURL,
+        })
+
+        this.$router.push({ name: 'Home' })
+      } else {
+        this.error = true
+        this.errorMsg = 'Please fill in all fields.'
+      }
+    } catch (err) {
+      this.error = true
+      this.errorMsg = err.message
+    }
+    }
+  }
+};
 
 function togglePassword() {
   const p = document.getElementById('pass');
@@ -21,43 +104,48 @@ function togglePassword() {
         <!-- two‐column row -->
         <div class="row">
           <div class="form-input col-sm-6">
-            <input type="text" placeholder="First Name" />
+            <input type="text" placeholder="First Name" v-model="firstName"/>
           </div>
           <div class="form-input col-sm-6">
-            <input type="text" placeholder="Last Name" />
+            <input type="text" placeholder="Last Name" v-model="lastName"/>
           </div>
         </div>
 
         <!-- full‐width fields -->
         <div class="form-input">
-          <input type="text" placeholder="Username" required />
+          <input type="text" placeholder="Username" v-model="username" required />
         </div>
         <div class="form-input">
-          <input type="email" placeholder="Email" required />
+          <input type="email" placeholder="Email" v-model="email" required />
         </div>
 
         <!-- two‐column password fields -->
         <div class="row">
           <div class="form-input col-sm-6">
-            <input type="password" placeholder="Password" id="pass" required />
+            <input type="password" placeholder="Password" id="pass" v-model="password" required />
             <span class="toggle-pass" @click="togglePassword">👁️</span>
           </div>
           <div class="form-input col-sm-6">
-            <input type="password" placeholder="Confirm Password" required />
+            <input type="password" placeholder="Confirm Password" v-model="confirmPassword" required />
           </div>
         </div>
 
         <!-- bio textarea -->
         <div class="form-input">
-          <textarea placeholder="Bio (About you in a few sentences)"></textarea>
+          <textarea placeholder="Bio (About you in a few sentences)" v-model="bio"></textarea>
         </div>
 
         <!-- file input -->
         <div class="form-input">
-          <input type="file" />
+          <input type="file" @change="handleFileChange"/>
         </div>
 
-        <button class="form-button" type="submit">SIGN IN</button>
+        <!-- error -->
+        <div v-show="error" class="error">
+          {{ this.errorMsg }}
+        </div>
+
+        <button @click.prevent="register" class="form-button" type="submit">SIGN IN</button>
 
         <div class="form-options">
           <label><input type="checkbox" /> Remember Me</label>
@@ -298,6 +386,12 @@ $white: #fff;
           flex-shrink: 0;
         }
       }
+    }
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-align: center;
     }
   }
 }

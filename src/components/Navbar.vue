@@ -19,10 +19,10 @@ onUnmounted(() => {
 <template>
   <nav :class="['navbar navbar-expand-lg fixed-top', { 'navbar-scrolled': isScrolled }]">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <router-link class="navbar-brand d-flex align-items-center gap-2" :to="{ name: 'Home' }">
         <img src="../assets/images/blogitLogo.png" class="logo-img" />
         <span>BLOGIT</span>
-      </a>
+      </router-link>
       <button
           class="navbar-toggler"
           type="button"
@@ -34,18 +34,21 @@ onUnmounted(() => {
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Portfolio</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+          <li class="nav-item">
+            <router-link class="nav-link active" :to="{ name: 'Home' }">Home</router-link>
+          </li>
+<!--          <li class="nav-item">-->
+<!--            <router-link class="nav-link" :to="{ name: 'Add Blog' }">Add Blog</router-link>-->
+<!--          </li>-->
+<!--          <li class="nav-item">-->
+<!--            <router-link class="nav-link" :to="{ name: 'About' }">About</router-link>-->
+<!--          </li>-->
+<!--          <li class="nav-item">-->
+<!--            <router-link class="nav-link" :to="{ name: 'Contact' }">Contact</router-link>-->
+<!--          </li>-->
           <li class="nav-item ms-lg-3">
             <button class="social-pill">
-              <img
-                  src="../assets/images/blogitIcon.png"
-                  alt="User Icon"
-                  class="social-pill__icon"
-              />
+              <img src="../assets/images/blogitIcon.png" alt="User Icon" class="social-pill__icon" />
               Login/Register
             </button>
           </li>

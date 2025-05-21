@@ -6,6 +6,7 @@ function togglePassword() {
   const p = document.getElementById('pass');
   p.type = p.type === 'password' ? 'text' : 'password';
 }
+
 </script>
 
 <template>
@@ -19,10 +20,10 @@ function togglePassword() {
       <div class="login-subtitle">Have an account?</div>
       <form>
         <div class="login-input">
-          <input type="text" placeholder="Username" required />
+          <input type="text" placeholder="Email"  required />
         </div>
         <div class="login-input">
-          <input type="password" placeholder="Password" id="pass" required />
+          <input  placeholder="Password"  required />
           <span class="toggle-pass" @click="togglePassword">👁️</span>
         </div>
         <button type="submit" class="login-button">SIGN IN</button>
@@ -71,8 +72,10 @@ $white: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg') no-repeat center center/cover;
-  position: relative;
+  background-image: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;  position: relative;
 
   &::before {
     content: '';
