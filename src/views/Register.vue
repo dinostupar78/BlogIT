@@ -4,8 +4,7 @@ import Footer from '../components/Footer.vue';
 import { auth, db } from '../firebase/firebaseConfig'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { storage } from '../firebase/firebaseConfig'
+
 
 
 
@@ -24,64 +23,30 @@ export default {
       password: '',
       confirmPassword: '',
       bio: '',
-      file: null,
       error: null,
       errorMsg: '',
 
     };
   },
   methods:{
-    handleFileChange(e) {
-      this.file = e.target.files[0]
-    },
     async register() {
       try {
-      if (
-          this.firstName &&
-          this.lastName &&
-          this.username &&
-          this.email &&
-          this.password &&
-          this.confirmPassword &&
-          this.bio
-      ) {
-        this.error = false
-        this.errorMsg = ''
-
-        const userCred = await createUserWithEmailAndPassword(
-            auth,
-            this.email,
-            this.password
-        )
-
-        let avatarURL = ''
-        if (this.file) {
-          const filePath = `avatars/${userCred.user.uid}/${this.file.name}`
-          const fileRef = storageRef(storage, filePath)
-          await uploadBytes(fileRef, this.file)
-          avatarURL = await getDownloadURL(fileRef)
-
-        }
-
+        const userCred = await createUserWithEmailAndPassword(auth, this.email, this.password)
         await setDoc(doc(db, 'users', userCred.user.uid), {
           firstName: this.firstName,
           lastName: this.lastName,
           username: this.username,
           email: this.email,
           bio: this.bio,
-          avatarURL: avatarURL,
         })
 
         this.$router.push({ name: 'Home' })
-      } else {
+      } catch (err) {
         this.error = true
-        this.errorMsg = 'Please fill in all fields.'
+        this.errorMsg = err.message
       }
-    } catch (err) {
-      this.error = true
-      this.errorMsg = err.message
     }
-    }
+
   }
 };
 
@@ -135,10 +100,7 @@ function togglePassword() {
           <textarea placeholder="Bio (About you in a few sentences)" v-model="bio"></textarea>
         </div>
 
-        <!-- file input -->
-        <div class="form-input">
-          <input type="file" @change="handleFileChange"/>
-        </div>
+
 
         <!-- error -->
         <div v-show="error" class="error">
@@ -245,7 +207,7 @@ $white: #fff;
     .row {
       display: flex;
       gap: 0rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
 
       @media (max-width: 576px) {
         flex-direction: column;

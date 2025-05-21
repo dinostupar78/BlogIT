@@ -1,11 +1,58 @@
-<script setup>
+<script >
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
+import { auth } from '../firebase/firebaseConfig'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import 'firebase/compat/auth'
 
-function togglePassword() {
-  const p = document.getElementById('pass');
-  p.type = p.type === 'password' ? 'text' : 'password';
+
+
+
+export default {
+  name: 'Login',
+  components: {
+    Navbar,
+    Footer
+  },
+  data() {
+    return {
+      email: '',
+      password: '',
+      error: null,
+      errorMsg: '',
+    };
+  },
+  methods:{
+    togglePassword(){
+    },
+     async signIn() {
+      try {
+        await signInWithEmailAndPassword(auth, this.email, this.password)
+        this.$router.push({ name: 'Home' })
+      } catch (err) {
+        switch (err.code){
+          case 'auth/user-not-found':
+            this.error = true
+            this.errorMsg = 'User not found'
+            break;
+          case 'auth/wrong-password':
+            this.error = true
+            this.errorMsg = 'Wrong password'
+            break;
+          case 'auth/invalid-email':
+            this.error = true
+            this.errorMsg = 'Invalid email'
+            break;
+          default:
+            this.error = true
+            this.errorMsg = err.message
+        }
+      }
+    }
+  }
 }
+
+
 
 </script>
 
@@ -20,13 +67,16 @@ function togglePassword() {
       <div class="login-subtitle">Have an account?</div>
       <form>
         <div class="login-input">
-          <input type="text" placeholder="Email"  required />
+          <input type="text" placeholder="Email" v-model="email" required />
         </div>
         <div class="login-input">
-          <input  placeholder="Password"  required />
+          <input  placeholder="Password" v-model="password" required />
           <span class="toggle-pass" @click="togglePassword">👁️</span>
         </div>
-        <button type="submit" class="login-button">SIGN IN</button>
+        <div v-show="error" class="error">
+          {{ this.errorMsg }}
+        </div>
+        <button @click.prevent="signIn" type="submit" class="login-button">SIGN IN</button>
         <div class="login-options">
           <label>
             <input type="checkbox" />
