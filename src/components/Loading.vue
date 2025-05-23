@@ -14,6 +14,12 @@ export default{
 </template>
 
 <style scoped lang="scss">
+@keyframes spin{
+  to{
+    transform: rotate(360deg);
+  }
+}
+
 .loading{
   top: 0;
   z-index: 101;
@@ -24,11 +30,7 @@ export default{
   display: flex;
   justify-content: center;
   align-items: center;
-  @keyframes spin{
-    to{
-      transform: rotate(360deg);
-    }
-  }
+
 
   .logo{
     width: 200px;

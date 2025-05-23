@@ -1,20 +1,57 @@
-<script setup>
+<script>
+import { auth } from '@/firebase/firebaseConfig';
+import { signOut } from 'firebase/auth';
 
-import { ref, onMounted, onUnmounted } from 'vue'
-const isScrolled = ref(false)
 
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
-}
+export default {
+  name: 'Navbar',
+  data() {
+    return {
+      profileMenu: false,
+      isScrolled: false,
+    };
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+    document.addEventListener('click', this.handleClickOutside);
 
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+    document.removeEventListener('click', this.handleClickOutside);
+  },
+  methods: {
+    handleScroll() {
+      this.isScrolled = window.scrollY > 0;
+    },
+    toggleProfileMenu() {
+      this.profileMenu = !this.profileMenu;
+    },
+    handleClickOutside(e) {
+      if (this.$refs.profile && !this.$refs.profile.contains(e.target)) {
+        this.profileMenu = false;
+      }
+    },
+    signOut() {
+      signOut(auth)
+          .then(() => {
+            console.log('Signed out successfully');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error('Sign out error:', error);
+          });
+    },
+  },
+  computed:{
+    user(){
+      return this.$store.state.user
+    }
+  }
+};
 </script>
+
+
 
 <template>
   <nav :class="['navbar navbar-expand-lg fixed-top', { 'navbar-scrolled': isScrolled }]">
@@ -46,21 +83,53 @@ onUnmounted(() => {
 <!--          <li class="nav-item">-->
 <!--            <router-link class="nav-link" :to="{ name: 'Contact' }">Contact</router-link>-->
 <!--          </li>-->
-          <li class="nav-item ms-lg-3">
+          <li v-if="!user" class="nav-item ms-lg-3">
             <button class="social-pill">
               <img src="../assets/images/blogitIcon.png" alt="User Icon" class="social-pill__icon" />
               Login/Register
             </button>
           </li>
+          <li v-if="user" @click.stop="toggleProfileMenu" class="profile" ref="profile">
+            <span>{{ $store.state.profileInitials }}</span>
+
+            <div @click.stop v-show="profileMenu" class="profile-menu">
+              <div class="info">
+                <p class="initials">{{ $store.state.profileInitials }}</p>
+                <div class="right">
+                  <p>{{ $store.state.profileFirstName }} {{ $store.state.profileLastName }}</p>
+                  <p>{{ $store.state.profileUsername }}</p>
+                  <p>{{ $store.state.profileEmail }}</p>
+                </div>
+              </div>
+
+              <div class="options">
+                <div class="option">
+                  <router-link class="nav-link" to="#">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                  </router-link>
+                </div>
+                <div class="option">
+                  <router-link class="nav-link" to="#">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Admin</span>
+                  </router-link>
+                </div>
+                <div @click="signOut" class="option">
+                  <div class="nav-link" >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Sign Out</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
         </ul>
       </div>
     </div>
   </nav>
 </template>
-
-
-<script setup>
-</script>
 
 <style scoped lang="scss">
 .navbar {
@@ -115,6 +184,112 @@ onUnmounted(() => {
       }
     }
   }
+  .profile {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    color: #26272b;
+    font-weight: bold;
+
+    .profile-menu {
+      position: absolute;
+      top: 52px;
+      right: 0;
+      width: 260px;
+      background-color: #26272b;
+      color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+      z-index: 10;
+      overflow: hidden;
+
+      .info {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        border-bottom: 1px solid #444;
+
+        .initials {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background-color: #fff;
+          color: #26272b;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+        }
+
+        .right {
+          flex: 1;
+          margin-left: 16px;
+
+          p {
+            margin: 0;
+            line-height: 1.4;
+          }
+
+          p:nth-child(1) {
+            font-size: 15px;
+            font-weight: 600;
+          }
+
+          p:nth-child(2),
+          p:nth-child(3) {
+            font-size: 13px;
+            color: #aaa;
+          }
+        }
+      }
+
+      .options {
+        padding: 12px;
+
+        .option {
+          margin-bottom: 10px;
+
+          .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ddd;
+            font-size: 14px;
+            padding: 6px 0;
+            text-decoration: none;
+
+            i {
+              width: 16px;
+              text-align: center;
+            }
+
+            span {
+              font-size: 14px;
+            }
+
+            &:hover {
+              color: #0d6efd;
+            }
+          }
+        }
+      }
+      @media (max-width: 576px) {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+      }
+
+    }
+
+
+  }
+
 }
 
 .navbar-toggler {

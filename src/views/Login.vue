@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import { auth } from '../firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import 'firebase/compat/auth'
 
 
 

@@ -3,6 +3,9 @@ import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import Modal from '../components/Modal.vue';
 import Loading from "@/components/Loading.vue";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from '../firebase/firebaseConfig';
+
 
 export default{
   name: 'ForgotPass',
@@ -17,7 +20,7 @@ export default{
       email: '',
       error: null,
       errorMsg: '',
-      modalActive: true,
+      modalActive: false,
       modalTitle: 'Reset Password',
       modalMessage: 'Reset link sent to your email',
       loading: null,
@@ -25,19 +28,24 @@ export default{
     };
   },
   methods:{
+    async resetPass() {
+      this.loading = true;
 
-    async sendReset() {
       try {
-        console.log(`Reset link sent to ${this.email}`);
+        await sendPasswordResetEmail(auth, this.email);
+        this.modalTitle = 'Success';
+        this.modalMessage = 'Reset link sent to your email';
+      } catch (error) {
+        this.modalTitle = 'Error';
+        this.modalMessage = error.message;
+      } finally {
+        this.email = '';
+        this.loading = false;
         this.modalActive = true;
-      } catch (err) {
-        this.error = true;
-        this.errorMsg = err.message;
       }
     },
     handleModalClose() {
       this.modalActive = false;
-      this.$router.push({name: 'Login'});
     },
   }
 }
@@ -56,7 +64,7 @@ export default{
       </div>
       <div class="forgotPass-subtitle">Enter your email to reset</div>
 
-      <form @submit.prevent="sendReset">
+      <form @submit.prevent="resetPass">
         <div class="forgotPass-input">
           <input
               type="email"

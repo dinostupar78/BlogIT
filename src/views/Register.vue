@@ -40,7 +40,7 @@ export default {
           bio: this.bio,
         })
 
-        this.$router.push({ name: 'Home' })
+        this.$router.push({ name: 'Login' })
       } catch (err) {
         this.error = true
         this.errorMsg = err.message
@@ -107,11 +107,10 @@ function togglePassword() {
           {{ this.errorMsg }}
         </div>
 
-        <button @click.prevent="register" class="form-button" type="submit">SIGN IN</button>
+        <button @click.prevent="register" class="form-button" type="submit">CREATE ACC</button>
 
         <div class="form-options">
-          <label><input type="checkbox" /> Remember Me</label>
-          <a href="#">Forgot Password</a>
+<!--          <label><input type="checkbox" /> Remember Me</label>-->
         </div>
         <div class="social-separator"><span>Or Create Acc With</span></div>
         <div class="social-buttons">
