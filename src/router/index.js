@@ -47,7 +47,8 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | BlogIT`;
+
+    document.title = `PWA`;
     next();
 })
 

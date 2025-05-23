@@ -2,12 +2,6 @@
 
 export default{
   props: ["modalTitle", "modalMessage"],
-  mounted() {
-    // Show the modal programmatically on mount
-    const el = document.getElementById('exampleModal');
-    const modal = window.mdb.Modal.getInstance(el) || new window.mdb.Modal(el);
-    modal.show();
-  },
   methods: {
     closeModal(){
       this.$emit("close-modal");

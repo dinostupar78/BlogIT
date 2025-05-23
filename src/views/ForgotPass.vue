@@ -29,12 +29,16 @@ export default{
     async sendReset() {
       try {
         console.log(`Reset link sent to ${this.email}`);
-        this.$router.push({ name: 'Login' });
+        this.modalActive = true;
       } catch (err) {
         this.error = true;
         this.errorMsg = err.message;
       }
-    }
+    },
+    handleModalClose() {
+      this.modalActive = false;
+      this.$router.push({name: 'Login'});
+    },
   }
 }
 
@@ -43,7 +47,7 @@ export default{
 <template>
   <Navbar/>
   <div class="forgotPass-page">
-    <Modal v-if="modalActive" :modalMessage="modalMessage" @close-modal="modalActive = false"/>
+    <Modal v-if="modalActive" :modal-title="modalTitle" :modal-message="modalMessage" @close-modal="handleModalClose"/>
     <Loading v-if="loading"/>
     <div class="forgotPass-wrap">
       <div class="forgotPass-header">
