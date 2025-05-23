@@ -6,16 +6,16 @@ import Footer from '../components/Footer.vue';
 
 <template>
   <Navbar/>
-  <div class="login-page">
-    <div class="login-wrap">
-      <div class="login-header">
+  <div class="forgotPass-page">
+    <div class="forgotPass-wrap">
+      <div class="forgotPass-header">
         <img src="@/assets/images/blogitLogo.png" alt="Logo" class="logo"/>
-        <div class="login-title">Forgot Password</div>
+        <div class="forgotPass-title">Forgot Password</div>
       </div>
-      <div class="login-subtitle">Enter your email to reset</div>
+      <div class="forgotPass-subtitle">Enter your email to reset</div>
 
       <form @submit.prevent="sendReset">
-        <div class="login-input">
+        <div class="forgotPass-input">
           <input
               type="email"
               v-model="email"
@@ -26,9 +26,9 @@ import Footer from '../components/Footer.vue';
 
         <div v-if="error" class="error">{{ errorMsg }}</div>
 
-        <button type="submit" class="login-button">SEND RESET LINK</button>
+        <button type="submit" class="forgotPass-button">SEND RESET LINK</button>
 
-        <div class="login-options">
+        <div class="forgotPass-options">
           <router-link to="/login">Back to Login</router-link>
         </div>
       </form>
@@ -47,7 +47,7 @@ $button-bg-hover: #ffb782;
 $text-color: #333;
 $white: #fff;
 
-.login-page {
+.forgotPass-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@ $white: #fff;
   }
 }
 
-.login-wrap {
+.forgotPass-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -75,27 +75,27 @@ $white: #fff;
   color: $white;
   margin: 0 auto;
 
-  .login-header {
+  .forgotPass-header {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
     .logo { width: 32px; height: 32px; }
-    .login-title {
+    .forgotPass-title {
       font-size: 1.5rem;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0,0,0,0.7);
     }
   }
 
-  .login-subtitle {
+  .forgotPass-subtitle {
     text-align: center;
     margin-bottom: 1.5rem;
     opacity: 0.9;
   }
 
-  .login-input {
+  .forgotPass-input {
     margin-bottom: 1rem;
     position: relative;
     input {
@@ -111,7 +111,7 @@ $white: #fff;
     }
   }
 
-  .login-button {
+  .forgotPass-button {
     width: 100%;
     padding: 0.75rem;
     border: none;
@@ -128,7 +128,7 @@ $white: #fff;
     &:hover { background: $button-bg-hover; }
   }
 
-  .login-options {
+  .forgotPass-options {
     text-align: center;
     a {
       color: $white;

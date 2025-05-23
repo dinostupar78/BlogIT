@@ -58,31 +58,31 @@ export default {
 
 <template>
   <Navbar />
-  <div class="login-page">
-    <div class="login-wrap">
-      <div class="login-header">
+  <div class="forgotPass-page">
+    <div class="forgotPass-wrap">
+      <div class="forgotPass-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
-        <div class="login-title">Login</div>
+        <div class="forgotPass-title">Login</div>
       </div>
-      <div class="login-subtitle">Have an account?</div>
+      <div class="forgotPass-subtitle">Have an account?</div>
       <form>
-        <div class="login-input">
+        <div class="forgotPass-input">
           <input type="text" placeholder="Email" v-model="email" required />
         </div>
-        <div class="login-input">
+        <div class="forgotPass-input">
           <input  placeholder="Password" v-model="password" required />
           <span class="toggle-pass" @click="togglePassword">👁️</span>
         </div>
         <div v-show="error" class="error">
           {{ this.errorMsg }}
         </div>
-        <button @click.prevent="signIn" type="submit" class="login-button">SIGN IN</button>
-        <div class="login-options">
+        <button @click.prevent="signIn" type="submit" class="forgotPass-button">SIGN IN</button>
+        <div class="forgotPass-options">
           <label>
             <input type="checkbox" />
             Remember Me
           </label>
-          <a href="#">Forgot Password</a>
+          <router-link to="/forgotPass">Forgot Password</router-link>
         </div>
         <div class="social-separator"><span>Or Sign In With</span></div>
         <div class="social-buttons">
@@ -117,7 +117,7 @@ $text-color: #333;
 $separator-line: rgba(255, 255, 255, 0.5);
 $white: #fff;
 
-.login-page {
+.forgotPass-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -139,7 +139,7 @@ $white: #fff;
   }
 }
 
-.login-wrap {
+.forgotPass-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -155,7 +155,7 @@ $white: #fff;
     max-width: 90%;
   }
 
-  .login-header {
+  .forgotPass-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,21 +168,21 @@ $white: #fff;
       object-fit: contain;
     }
 
-    .login-title {
+    .forgotPass-title {
       font-size: 24px;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
     }
   }
 
-  .login-subtitle {
+  .forgotPass-subtitle {
     font-size: 18px;
     margin-bottom: 30px;
     text-align: center;
     opacity: 0.9;
   }
 
-  .login-input {
+  .forgotPass-input {
     position: relative;
     margin-bottom: 20px;
 
@@ -212,7 +212,7 @@ $white: #fff;
     }
   }
 
-  .login-button {
+  .forgotPass-button {
     width: 100%;
     padding: 14px;
     border: none;
@@ -230,7 +230,7 @@ $white: #fff;
     }
   }
 
-  .login-options {
+  .forgotPass-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
