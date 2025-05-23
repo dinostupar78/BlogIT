@@ -1,12 +1,50 @@
-<script setup>
+<script >
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
+import Modal from '../components/Modal.vue';
+import Loading from "@/components/Loading.vue";
+
+export default{
+  name: 'ForgotPass',
+  components: {
+    Navbar,
+    Footer,
+    Loading,
+    Modal
+  },
+  data() {
+    return {
+      email: '',
+      error: null,
+      errorMsg: '',
+      modalActive: true,
+      modalTitle: 'Reset Password',
+      modalMessage: 'Reset link sent to your email',
+      loading: null,
+
+    };
+  },
+  methods:{
+
+    async sendReset() {
+      try {
+        console.log(`Reset link sent to ${this.email}`);
+        this.$router.push({ name: 'Login' });
+      } catch (err) {
+        this.error = true;
+        this.errorMsg = err.message;
+      }
+    }
+  }
+}
 
 </script>
 
 <template>
   <Navbar/>
   <div class="forgotPass-page">
+    <Modal v-if="modalActive" :modalMessage="modalMessage" @close-modal="modalActive = false"/>
+    <Loading v-if="loading"/>
     <div class="forgotPass-wrap">
       <div class="forgotPass-header">
         <img src="@/assets/images/blogitLogo.png" alt="Logo" class="logo"/>

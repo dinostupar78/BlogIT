@@ -1,9 +1,13 @@
 <script>
-import { Modal, Ripple, initMDB } from "mdb-ui-kit";
-initMDB({ Modal, Ripple });
 
 export default{
-  props: ["modalMessage"],
+  props: ["modalTitle", "modalMessage"],
+  mounted() {
+    // Show the modal programmatically on mount
+    const el = document.getElementById('exampleModal');
+    const modal = window.mdb.Modal.getInstance(el) || new window.mdb.Modal(el);
+    modal.show();
+  },
   methods: {
     closeModal(){
       this.$emit("close-modal");
@@ -19,11 +23,11 @@ export default{
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
           <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>{ {this.modalMessage}}</p>
+          <p>{{modalMessage}}</p>
         </div>
         <div class="modal-footer">
           <button @click="closeModal" type="button" class="btn btn-primary" data-mdb-ripple-init>Close</button>
