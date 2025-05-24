@@ -1,6 +1,8 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+
+
 </script>
 
 <template>
@@ -10,6 +12,13 @@ import Footer from "@/components/Footer.vue";
       <div class="profile-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
         <div class="profile-title">Account Settings</div>
+      </div>
+      <div class="profile-avatar">
+        <div class="initials">{{ $store.state.profileInitials }}</div>
+        <div class="admin-badge">
+          <i class="fa fa-user-shield"></i>
+          <span>Admin</span>
+        </div>
       </div>
       <form>
         <div class="profile-input">
@@ -46,6 +55,8 @@ $white: #fff;
 
 .profile-page {
   min-height: 100vh;
+  padding-top: 90px;
+  padding-bottom: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,6 +165,41 @@ $white: #fff;
 
     &:hover {
       background: $button-bg-hover;
+    }
+
+  }
+
+  .profile-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+
+    .initials {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: #fff;
+      color: #26272b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .admin-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
+      padding: 6px 16px;
+      border-radius: 50px;
+      text-align: center;
+      text-transform: capitalize;
+      border: 1px rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
