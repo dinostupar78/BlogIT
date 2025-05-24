@@ -4,9 +4,6 @@ import Footer from '../components/Footer.vue';
 import { auth } from '../firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
-
-
-
 export default {
   name: 'Login',
   components: {
@@ -57,26 +54,26 @@ export default {
 
 <template>
   <Navbar />
-  <div class="forgotPass-page">
-    <div class="forgotPass-wrap">
-      <div class="forgotPass-header">
+  <div class="profile-page">
+    <div class="profile-wrap">
+      <div class="profile-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
-        <div class="forgotPass-title">Login</div>
+        <div class="profile-title">Login</div>
       </div>
-      <div class="forgotPass-subtitle">Have an account?</div>
+      <div class="login-subtitle">Have an account?</div>
       <form>
-        <div class="forgotPass-input">
+        <div class="profile-input">
           <input type="text" placeholder="Email" v-model="email" required />
         </div>
-        <div class="forgotPass-input">
+        <div class="profile-input">
           <input  placeholder="Password" v-model="password" required />
           <span class="toggle-pass" @click="togglePassword">👁️</span>
         </div>
         <div v-show="error" class="error">
           {{ this.errorMsg }}
         </div>
-        <button @click.prevent="signIn" type="submit" class="forgotPass-button">SIGN IN</button>
-        <div class="forgotPass-options">
+        <button @click.prevent="signIn" type="submit" class="profile-button">SIGN IN</button>
+        <div class="login-options">
           <label>
             <input type="checkbox" />
             Remember Me
@@ -116,7 +113,7 @@ $text-color: #333;
 $separator-line: rgba(255, 255, 255, 0.5);
 $white: #fff;
 
-.forgotPass-page {
+.profile-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -138,7 +135,7 @@ $white: #fff;
   }
 }
 
-.forgotPass-wrap {
+.profile-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -154,7 +151,7 @@ $white: #fff;
     max-width: 90%;
   }
 
-  .forgotPass-header {
+  .profile-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,21 +164,21 @@ $white: #fff;
       object-fit: contain;
     }
 
-    .forgotPass-title {
+    .profile-title {
       font-size: 24px;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
     }
   }
 
-  .forgotPass-subtitle {
+  .login-subtitle {
     font-size: 18px;
     margin-bottom: 30px;
     text-align: center;
     opacity: 0.9;
   }
 
-  .forgotPass-input {
+  .profile-input {
     position: relative;
     margin-bottom: 20px;
 
@@ -211,7 +208,7 @@ $white: #fff;
     }
   }
 
-  .forgotPass-button {
+  .profile-button {
     width: 100%;
     padding: 14px;
     border: none;
@@ -229,7 +226,7 @@ $white: #fff;
     }
   }
 
-  .forgotPass-options {
+  .login-options {
     display: flex;
     justify-content: space-between;
     align-items: center;

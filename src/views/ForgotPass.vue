@@ -54,18 +54,18 @@ export default{
 
 <template>
   <Navbar/>
-  <div class="forgotPass-page">
+  <div class="profile-page">
     <Modal v-if="modalActive" :modal-title="modalTitle" :modal-message="modalMessage" @close-modal="handleModalClose"/>
     <Loading v-if="loading"/>
-    <div class="forgotPass-wrap">
-      <div class="forgotPass-header">
+    <div class="profile-wrap">
+      <div class="profile-header">
         <img src="@/assets/images/blogitLogo.png" alt="Logo" class="logo"/>
-        <div class="forgotPass-title">Forgot Password</div>
+        <div class="profile-title">Forgot Password</div>
       </div>
-      <div class="forgotPass-subtitle">Enter your email to reset</div>
+      <div class="login-subtitle">Enter your email to reset</div>
 
       <form @submit.prevent="resetPass">
-        <div class="forgotPass-input">
+        <div class="profile-input">
           <input
               type="email"
               v-model="email"
@@ -76,9 +76,9 @@ export default{
 
         <div v-if="error" class="error">{{ errorMsg }}</div>
 
-        <button type="submit" class="forgotPass-button">SEND RESET LINK</button>
+        <button type="submit" class="profile-button">SEND RESET LINK</button>
 
-        <div class="forgotPass-options">
+        <div class="login-options">
           <router-link to="/login">Back to Login</router-link>
         </div>
       </form>
@@ -97,7 +97,7 @@ $button-bg-hover: #ffb782;
 $text-color: #333;
 $white: #fff;
 
-.forgotPass-page {
+.profile-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -114,7 +114,7 @@ $white: #fff;
   }
 }
 
-.forgotPass-wrap {
+.profile-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -125,27 +125,27 @@ $white: #fff;
   color: $white;
   margin: 0 auto;
 
-  .forgotPass-header {
+  .profile-header {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
     .logo { width: 32px; height: 32px; }
-    .forgotPass-title {
+    .profile-title {
       font-size: 1.5rem;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0,0,0,0.7);
     }
   }
 
-  .forgotPass-subtitle {
+  .login-subtitle {
     text-align: center;
     margin-bottom: 1.5rem;
     opacity: 0.9;
   }
 
-  .forgotPass-input {
+  .profile-input {
     margin-bottom: 1rem;
     position: relative;
     input {
@@ -161,7 +161,7 @@ $white: #fff;
     }
   }
 
-  .forgotPass-button {
+  .profile-button {
     width: 100%;
     padding: 0.75rem;
     border: none;
@@ -178,7 +178,7 @@ $white: #fff;
     &:hover { background: $button-bg-hover; }
   }
 
-  .forgotPass-options {
+  .login-options {
     text-align: center;
     a {
       color: $white;

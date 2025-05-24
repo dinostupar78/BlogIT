@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import ForgotPass from "@/views/ForgotPass.vue";
+import Profile from "@/views/Profile.vue";
 
 const routes = [
     {
@@ -11,6 +12,14 @@ const routes = [
         component: Home,
         meta: {
             title: 'Home',
+        },
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile,
+        meta : {
+            title: 'Profile',
         },
     },
     {

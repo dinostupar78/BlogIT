@@ -15,7 +15,7 @@ export default {
 
       if (user) {
         await this.$store.dispatch('getCurrentUser')
-        console.log('✅ Vuex email:', this.$store.state.profileEmail)
+        console.log('Vuex email:', this.$store.state.profileEmail)
       }
     })
   },

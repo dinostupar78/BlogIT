@@ -104,7 +104,7 @@ export default {
 
               <div class="options">
                 <div class="option">
-                  <router-link class="nav-link" to="#">
+                  <router-link class="nav-link" to="/profile">
                     <i class="fa-solid fa-user"></i>
                     <span>Profile</span>
                   </router-link>
