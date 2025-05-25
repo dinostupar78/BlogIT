@@ -54,18 +54,18 @@ export default{
 
 <template>
   <Navbar/>
-  <div class="profile-page">
+  <div class="admin-page">
     <Modal v-if="modalActive" :modal-title="modalTitle" :modal-message="modalMessage" @close-modal="handleModalClose"/>
     <Loading v-if="loading"/>
-    <div class="profile-wrap">
-      <div class="profile-header">
+    <div class="admin-wrap">
+      <div class="admin-header">
         <img src="@/assets/images/blogitLogo.png" alt="Logo" class="logo"/>
-        <div class="profile-title">Forgot Password</div>
+        <div class="admin-title">Forgot Password</div>
       </div>
-      <div class="login-subtitle">Enter your email to reset</div>
+      <div class="admin-subtitle">Enter your email to reset</div>
 
       <form @submit.prevent="resetPass">
-        <div class="profile-input">
+        <div class="admin-input">
           <input
               type="email"
               v-model="email"
@@ -76,7 +76,7 @@ export default{
 
         <div v-if="error" class="error">{{ errorMsg }}</div>
 
-        <button type="submit" class="profile-button">SEND RESET LINK</button>
+        <button type="submit" class="admin-button">SEND RESET LINK</button>
 
         <div class="login-options">
           <router-link to="/login">Back to Login</router-link>
@@ -97,7 +97,7 @@ $button-bg-hover: #ffb782;
 $text-color: #333;
 $white: #fff;
 
-.profile-page {
+.admin-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -114,7 +114,7 @@ $white: #fff;
   }
 }
 
-.profile-wrap {
+.admin-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -125,27 +125,27 @@ $white: #fff;
   color: $white;
   margin: 0 auto;
 
-  .profile-header {
+  .admin-header {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
     .logo { width: 32px; height: 32px; }
-    .profile-title {
+    .admin-title {
       font-size: 1.5rem;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0,0,0,0.7);
     }
   }
 
-  .login-subtitle {
+  .admin-subtitle {
     text-align: center;
     margin-bottom: 1.5rem;
     opacity: 0.9;
   }
 
-  .profile-input {
+  .admin-input {
     margin-bottom: 1rem;
     position: relative;
     input {
@@ -161,7 +161,7 @@ $white: #fff;
     }
   }
 
-  .profile-button {
+  .admin-button {
     width: 100%;
     padding: 0.75rem;
     border: none;

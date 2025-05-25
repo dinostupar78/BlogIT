@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import ForgotPass from "@/views/ForgotPass.vue";
 import Profile from "@/views/Profile.vue";
+import Admin from "@/views/Admin.vue";
 
 const routes = [
     {
@@ -20,6 +21,14 @@ const routes = [
         component: Profile,
         meta : {
             title: 'Profile',
+        },
+    },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: Admin,
+        meta : {
+            title: 'admin',
         },
     },
     {

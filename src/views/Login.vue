@@ -54,25 +54,25 @@ export default {
 
 <template>
   <Navbar />
-  <div class="profile-page">
-    <div class="profile-wrap">
-      <div class="profile-header">
+  <div class="admin-page">
+    <div class="admin-wrap">
+      <div class="admin-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
-        <div class="profile-title">Login</div>
+        <div class="admin-title">Login</div>
       </div>
-      <div class="login-subtitle">Have an account?</div>
+      <div class="admin-subtitle">Have an account?</div>
       <form>
-        <div class="profile-input">
+        <div class="admin-input">
           <input type="text" placeholder="Email" v-model="email" required />
         </div>
-        <div class="profile-input">
+        <div class="admin-input">
           <input  placeholder="Password" v-model="password" required />
           <span class="toggle-pass" @click="togglePassword">👁️</span>
         </div>
         <div v-show="error" class="error">
           {{ this.errorMsg }}
         </div>
-        <button @click.prevent="signIn" type="submit" class="profile-button">SIGN IN</button>
+        <button @click.prevent="signIn" type="submit" class="admin-button">SIGN IN</button>
         <div class="login-options">
           <label>
             <input type="checkbox" />
@@ -113,7 +113,7 @@ $text-color: #333;
 $separator-line: rgba(255, 255, 255, 0.5);
 $white: #fff;
 
-.profile-page {
+.admin-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -135,7 +135,7 @@ $white: #fff;
   }
 }
 
-.profile-wrap {
+.admin-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -151,7 +151,7 @@ $white: #fff;
     max-width: 90%;
   }
 
-  .profile-header {
+  .admin-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,21 +164,21 @@ $white: #fff;
       object-fit: contain;
     }
 
-    .profile-title {
+    .admin-title {
       font-size: 24px;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
     }
   }
 
-  .login-subtitle {
+  .admin-subtitle {
     font-size: 18px;
     margin-bottom: 30px;
     text-align: center;
     opacity: 0.9;
   }
 
-  .profile-input {
+  .admin-input {
     position: relative;
     margin-bottom: 20px;
 
@@ -208,7 +208,7 @@ $white: #fff;
     }
   }
 
-  .profile-button {
+  .admin-button {
     width: 100%;
     padding: 14px;
     border: none;

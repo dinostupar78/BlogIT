@@ -71,17 +71,17 @@ export default {
 
 <template>
   <Navbar />
-  <div class="profile-page">
+  <div class="admin-page">
     <Modal
       v-if="modalActive"
       :modalTitle="modalTitle"
       :modalMessage="modalMessage"
       v-on:close-modal="closeModal"
       @close-modal="showModal = false" />
-    <div class="profile-wrap">
-      <div class="profile-header">
+    <div class="admin-wrap">
+      <div class="admin-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
-        <div class="profile-title">Account Settings</div>
+        <div class="admin-title">Account Settings</div>
       </div>
       <div class="profile-avatar">
         <div class="initials">{{ $store.state.profileInitials }}</div>
@@ -91,21 +91,21 @@ export default {
         </div>
       </div>
       <form @submit.prevent="updateProfile">
-        <div class="profile-input">
+        <div class="admin-input">
           <input type="text" placeholder="First Name" v-model="firstName" required />
         </div>
-        <div class="profile-input">
+        <div class="admin-input">
           <input type="text" placeholder="Last Name" v-model="lastName" required />
         </div>
-        <div class="profile-input">
+        <div class="admin-input">
           <input type="text" placeholder="Username" v-model="username" required />
         </div>
-        <div class="profile-input">
+        <div class="admin-input">
           <input disabled type="text" placeholder="Email" v-model="email" required />
         </div>
 
 
-        <button type="submit" class="profile-button">SAVE CHANGES</button>
+        <button type="submit" class="admin-button">SAVE CHANGES</button>
 
       </form>
     </div>
@@ -123,7 +123,7 @@ $text-color: #333;
 $separator-line: rgba(255, 255, 255, 0.5);
 $white: #fff;
 
-.profile-page {
+.admin-page {
   min-height: 100vh;
   padding-top: 90px;
   padding-bottom: 40px;
@@ -147,7 +147,7 @@ $white: #fff;
   }
 }
 
-.profile-wrap {
+.admin-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -163,7 +163,7 @@ $white: #fff;
     max-width: 90%;
   }
 
-  .profile-header {
+  .admin-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -176,7 +176,7 @@ $white: #fff;
       object-fit: contain;
     }
 
-    .profile-title {
+    .admin-title {
       font-size: 24px;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
@@ -190,7 +190,7 @@ $white: #fff;
     opacity: 0.9;
   }
 
-  .profile-input {
+  .admin-input {
     position: relative;
     margin-bottom: 20px;
 
@@ -220,7 +220,7 @@ $white: #fff;
     }
   }
 
-  .profile-button {
+  .admin-button {
     width: 100%;
     padding: 14px;
     border: none;
