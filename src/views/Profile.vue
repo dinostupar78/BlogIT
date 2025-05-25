@@ -1,6 +1,70 @@
-<script setup>
+<script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import Modal from "@/components/Modal.vue";
+
+
+export default {
+  name: "Profile",
+  components: {
+    Navbar,
+    Footer,
+    Modal
+  },
+  mounted() {
+    this.$store.dispatch("getCurrentUser");
+  },
+  data() {
+    return {
+      isLoading: false,
+      showModal: false,
+      modalTitle: "Success",
+      modalMessage: "Changes saved successfully!",
+      modalActive: false,
+    };
+  },
+  methods: {
+    closeModal() {
+      this.modalActive = false;
+      this.showModal = false;
+    },
+    updateProfile() {
+      this.$store.dispatch("updateUserSettings");
+      this.modalActive = true;
+
+    }
+  },
+  computed: {
+    firstName: {
+      get() {
+        return this.$store.state.profileFirstName;
+      },
+      set(value) {
+        this.$store.commit('changeFirstName', value);
+      }
+    },
+    lastName: {
+      get() {
+        return this.$store.state.profileLastName;
+      },
+      set(value) {
+        this.$store.commit('changeLastName', value);
+      }
+    },
+    username: {
+      get() {
+        return this.$store.state.profileUsername;
+      },
+      set(value) {
+        this.$store.commit('changeUsername', value);
+      }
+    },
+    email() {
+      return this.$store.state.profileEmail;
+    }
+  },
+
+};
 
 
 </script>
@@ -8,6 +72,12 @@ import Footer from "@/components/Footer.vue";
 <template>
   <Navbar />
   <div class="profile-page">
+    <Modal
+      v-if="modalActive"
+      :modalTitle="modalTitle"
+      :modalMessage="modalMessage"
+      v-on:close-modal="closeModal"
+      @close-modal="showModal = false" />
     <div class="profile-wrap">
       <div class="profile-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
@@ -20,18 +90,18 @@ import Footer from "@/components/Footer.vue";
           <span>Admin</span>
         </div>
       </div>
-      <form>
+      <form @submit.prevent="updateProfile">
         <div class="profile-input">
-          <input type="text" placeholder="First Name"  required />
+          <input type="text" placeholder="First Name" v-model="firstName" required />
         </div>
         <div class="profile-input">
-          <input type="text" placeholder="Last Name"  required />
+          <input type="text" placeholder="Last Name" v-model="lastName" required />
         </div>
         <div class="profile-input">
-          <input type="text" placeholder="Username"  required />
+          <input type="text" placeholder="Username" v-model="username" required />
         </div>
         <div class="profile-input">
-          <input type="text" placeholder="Email"  required />
+          <input disabled type="text" placeholder="Email" v-model="email" required />
         </div>
 
 

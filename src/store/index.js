@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 import { auth, db } from '../firebase/firebaseConfig'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+
+
 
 
 
@@ -31,6 +33,15 @@ export default createStore({
                 state.profileFirstName.match(/\b\S/g).join('') +
                 state.profileLastName.match(/\b\S/g).join('')
         },
+        changeFirstName(state, value) {
+            state.profileFirstName = value
+        },
+        changeLastName(state, value) {
+            state.profileLastName = value
+        },
+        changeUsername(state, value) {
+            state.profileUsername = value
+        }
     },
     actions: {
         async getCurrentUser({ commit }) {
@@ -50,6 +61,27 @@ export default createStore({
 
             commit('setProfileInfo', snapshot)
             commit('setProfileInitials')
+        },
+        async updateUserSettings({ commit, state }) {
+            const uid = auth.currentUser?.uid
+            if (!uid) {
+                console.error('No user signed in!')
+                return
+            }
+
+            const userDocRef = doc(db, 'users', uid)
+            const userData = {
+                firstName: state.profileFirstName,
+                lastName: state.profileLastName,
+                username: state.profileUsername
+            }
+
+            try {
+                await updateDoc(userDocRef, userData)
+                commit('setProfileInitials')
+            } catch (error) {
+                console.error('Error updating user settings:', error)
+            }
         }
     }
 
