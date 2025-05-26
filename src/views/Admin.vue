@@ -1,5 +1,4 @@
 <script setup>
-
 import Footer from "@/components/Footer.vue";
 import Loading from "@/components/Loading.vue";
 import Modal from "@/components/Modal.vue";
