@@ -1,19 +1,38 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp();
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+exports.addAdminRole = functions.https.onCall((data, context) => {
+    console.log("🟡 Raw received data:", data);
+    console.log("📧 data.email:", data.email);
+    console.log("📏 typeof data.email:", typeof data.email);
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+    if (!data.email || typeof data.email !== "string") {
+        console.error("❌ Email is missing or not a string.");
+        throw new functions.https.HttpsError(
+            "invalid-argument",
+            "Email is missing or not a string."
+        );
+    }
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    return admin.auth().getUserByEmail(data.email)
+        .then((user) => {
+            console.log("👤 User found:", user.uid);
+            return admin.auth().setCustomUserClaims(user.uid, {
+                admin: true,
+            });
+        })
+        .then(() => {
+            console.log(`✅ Admin claim successfully set for ${data.email}`);
+            return {
+                message: `Success! ${data.email} has been made an admin.`,
+            };
+        })
+        .catch((error) => {
+            console.error("🔥 Error in addAdminRole:", error);
+            throw new functions.https.HttpsError(
+                "internal",
+                error.message || "Unknown error"
+            );
+        });
+});

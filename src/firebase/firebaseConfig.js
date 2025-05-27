@@ -1,7 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import {getStorage} from "firebase/storage";
+import {getStorage} from "firebase/storage"
+import { getFunctions } from 'firebase/functions';
+
 
 
 
@@ -17,7 +19,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const storage = getStorage(app)
+const storage = getStorage(app);
+const functions = getFunctions(app, "us-central1");
 
 
-export { db, auth, storage, serverTimestamp };
+
+export { db, auth, storage, functions, serverTimestamp };

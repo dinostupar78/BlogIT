@@ -1,8 +1,79 @@
-<script setup>
+<script >
 import Footer from "@/components/Footer.vue";
 import Loading from "@/components/Loading.vue";
 import Modal from "@/components/Modal.vue";
 import Navbar from "@/components/Navbar.vue";
+import { functions } from "../firebase/firebaseConfig";
+import { httpsCallable } from "firebase/functions";
+import { getAuth } from "firebase/auth"
+
+export default{
+  name: 'Admin',
+  components: {
+    Navbar,
+    Footer,
+    Loading,
+    Modal
+  },
+  data() {
+    return {
+      adminEmail: '',
+      functionMsg: '',
+      error: null,
+      errorMsg: '',
+      modalActive: false,
+      loading: false,
+    };
+  },
+  methods: {
+    async addAdmin() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        console.log("Admin email being sent:", this.adminEmail);
+        const auth = getAuth();
+
+        if (!auth.currentUser) {
+          throw new Error("You must be logged in to assign admin roles.");
+        }
+
+        if (!this.adminEmail || typeof this.adminEmail !== "string") {
+          throw new Error("Email field is empty or invalid.");
+        }
+
+
+        const addAdminRole = httpsCallable(functions, 'addAdminRole');
+        const result = await addAdminRole({ email: this.adminEmail.trim() });
+
+        if (!result || !result.data || !result.data.message) {
+          throw new Error("Function call failed or returned invalid data.");
+        }
+
+        this.modalTitle = 'Success';
+        this.modalMessage = result.data.message;
+        this.modalActive = true;
+      } catch (err) {
+        console.error('Admin error:', err);
+
+        // Handle Firebase HttpsError with readable message
+        const errorMessage = err?.message || err?.data?.message || 'Something went wrong.';
+        this.modalTitle = 'Error';
+        this.modalMessage = errorMessage;
+        this.modalActive = true;
+        this.error = true;
+        this.errorMsg = errorMessage;
+      } finally {
+        this.loading = false;
+        this.adminEmail = '';
+      }
+    },
+    handleModalClose() {
+      this.modalActive = false;
+    }
+
+  }
+}
 </script>
 
 <template>
@@ -17,11 +88,11 @@ import Navbar from "@/components/Navbar.vue";
       </div>
       <div class="admin-subtitle">Enter email to make them admin</div>
 
-      <form @submit.prevent="resetPass">
+      <form @submit.prevent="addAdmin">
         <div class="admin-input">
           <input
               type="email"
-              v-model="email"
+              v-model="adminEmail"
               placeholder="Email"
               required
           />
@@ -30,8 +101,8 @@ import Navbar from "@/components/Navbar.vue";
         <div v-if="error" class="error">{{ errorMsg }}</div>
 
         <button type="submit" class="admin-button">SUBMIT</button>
-
       </form>
+
     </div>
   </div>
   <Footer/>

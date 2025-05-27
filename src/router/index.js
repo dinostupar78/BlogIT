@@ -5,6 +5,8 @@ import Register from '@/views/Register.vue'
 import ForgotPass from "@/views/ForgotPass.vue";
 import Profile from "@/views/Profile.vue";
 import Admin from "@/views/Admin.vue";
+import CreatePost from "@/views/CreatePost.vue";
+
 
 const routes = [
     {
@@ -53,6 +55,14 @@ const routes = [
         component: Register,
         meta : {
             title: 'Register',
+        },
+    },
+    {
+        path: '/createPost',
+        name: 'CreatePost',
+        component: CreatePost,
+        meta : {
+            title: 'CreatePost',
         },
     },
 

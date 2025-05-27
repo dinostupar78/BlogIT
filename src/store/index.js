@@ -2,12 +2,13 @@ import { createStore } from 'vuex'
 import { auth, db } from '../firebase/firebaseConfig'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 
-
-
-
-
 export default createStore({
     state: {
+        blogHTML: 'Write your blog post here...',
+        blogTitle: '',
+        blogPhotoName: '',
+        blogPhotoURL: null,
+        blogPhotoPreview: null,
         user:              null,
         profileId:         null,
         profileEmail:      null,
@@ -15,10 +16,14 @@ export default createStore({
         profileLastName:   null,
         profileUsername:   null,
         profileInitials:   null,
+        profileAdmin:      null
     },
     mutations: {
         updateUser(state, user) {
             state.user = user
+        },
+        setProfileAdmin(state, isAdmin) {
+            state.profileAdmin = isAdmin
         },
         setProfileInfo(state, doc) {
             const d = doc.data()
@@ -44,7 +49,7 @@ export default createStore({
         }
     },
     actions: {
-        async getCurrentUser({ commit }) {
+        async getCurrentUser({ commit }, user) {
             const uid = auth.currentUser?.uid
             if (!uid) {
                 console.error('No user signed in!')
@@ -61,6 +66,9 @@ export default createStore({
 
             commit('setProfileInfo', snapshot)
             commit('setProfileInitials')
+            const token = await user.getIdTokenResult();
+            const admin = token.claims.admin;
+            commit('setProfileAdmin', admin);
         },
         async updateUserSettings({ commit, state }) {
             const uid = auth.currentUser?.uid

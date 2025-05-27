@@ -46,7 +46,11 @@ export default {
   computed:{
     user(){
       return this.$store.state.user
+    },
+    admin(){
+      return this.$store.state.profileAdmin
     }
+
   }
 };
 </script>
@@ -73,6 +77,9 @@ export default {
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
             <router-link class="nav-link active" :to="{ name: 'Home' }">Home</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link " :to="{ name: 'CreatePost' }">Create Post</router-link>
           </li>
 <!--          <li class="nav-item">-->
 <!--            <router-link class="nav-link" :to="{ name: 'Add Blog' }">Add Blog</router-link>-->
@@ -110,7 +117,7 @@ export default {
                   </router-link>
                 </div>
                 <div class="option">
-                  <router-link class="nav-link" to="#">
+                  <router-link v-if="admin" class="nav-link" to="#">
                     <i class="fa-solid fa-user-shield"></i>
                     <span>Admin</span>
                   </router-link>

@@ -14,7 +14,7 @@ export default {
       this.$store.commit('updateUser', user)
 
       if (user) {
-        await this.$store.dispatch('getCurrentUser')
+        await this.$store.dispatch('getCurrentUser', user)
         console.log('Vuex email:', this.$store.state.profileEmail)
       }
     })
