@@ -1,4 +1,4 @@
-<script setup>
+<script>
 
 </script>
 
@@ -116,10 +116,50 @@
 
   p {
     font-size: calc(1rem + 0.5vw);
-
     width: 75%;
     margin: auto;
     line-height: 1.9;
+  }
+}
+
+@media (max-width: 992px) {
+  .carousel-item img {
+    height: 70vh;
+  }
+
+  .carousel-caption {
+    bottom: 18%;  /* move it up just a little */
+
+    h5 {
+      font-size: calc(1.25rem + 1vw);
+    }
+
+    p {
+      font-size: calc(0.9rem + 0.5vw);
+      width: 90%;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-item img {
+    height: 50vh;
+  }
+
+  .carousel-caption {
+    bottom: 10%;
+
+    h5 {
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+    }
+
+    p {
+      font-size: 1rem;
+      width: 100%;
+      line-height: 1.6;
+      padding: 0 1rem;
+    }
   }
 }
 

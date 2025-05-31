@@ -1,6 +1,7 @@
 <script>
-import { auth } from '@/firebase/firebaseConfig';
-import { signOut } from 'firebase/auth';
+import {auth, db} from '@/firebase/firebaseConfig';
+import {onAuthStateChanged, signOut} from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 
 export default {
@@ -9,11 +10,26 @@ export default {
     return {
       profileMenu: false,
       isScrolled: false,
+      isAdmin: false,
+      authUser: null,
     };
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
     document.addEventListener('click', this.handleClickOutside);
+
+    onAuthStateChanged(auth, async (u) => {
+      this.authUser = u;
+
+      if (u) {
+        const snap = await getDoc(doc(db, "users", u.uid));
+        this.isAdmin = snap.exists() && snap.data().admin === true;
+      } else {
+        this.isAdmin = false;
+      }
+    });
+
+
 
   },
   beforeUnmount() {
@@ -22,7 +38,7 @@ export default {
   },
   methods: {
     handleScroll() {
-      this.isScrolled = window.scrollY > 0;
+      this.isScrolled = window.scrollY > 0 || this.isAlwaysScrolled;
     },
     toggleProfileMenu() {
       this.profileMenu = !this.profileMenu;
@@ -49,7 +65,14 @@ export default {
     },
     admin(){
       return this.$store.state.profileAdmin
+    },
+    isAlwaysScrolled() {
+      return this.$route.name === 'Blogs' ||
+          this.$route.name === 'Category' ||
+          this.$route.name === 'BlogPreview' ||
+          this.$route.name === 'ViewBlog'
     }
+
 
   }
 };
@@ -58,7 +81,7 @@ export default {
 
 
 <template>
-  <nav :class="['navbar navbar-expand-lg fixed-top', { 'navbar-scrolled': isScrolled }]">
+  <nav :class="['navbar navbar-expand-lg fixed-top', { 'navbar-scrolled': isScrolled || isAlwaysScrolled}]">
     <div class="container">
       <router-link class="navbar-brand d-flex align-items-center gap-2" :to="{ name: 'Home' }">
         <img src="../assets/images/blogitLogo.png" class="logo-img" />
@@ -76,20 +99,16 @@ export default {
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
-            <router-link class="nav-link active" :to="{ name: 'Home' }">Home</router-link>
+            <router-link class="nav-link" :class="{ active: $route.name === 'Home' }" :to="{ name: 'Home' }">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link " :to="{ name: 'CreatePost' }">Create Post</router-link>
+            <router-link class="nav-link" :class="{ active: $route.name === 'Blogs' }" :to="{ name: 'Blogs' }">Blogs</router-link>
           </li>
-<!--          <li class="nav-item">-->
-<!--            <router-link class="nav-link" :to="{ name: 'Add Blog' }">Add Blog</router-link>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <router-link class="nav-link" :to="{ name: 'About' }">About</router-link>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <router-link class="nav-link" :to="{ name: 'Contact' }">Contact</router-link>-->
-<!--          </li>-->
+          <li class="nav-item">
+            <router-link class="nav-link " :class="{ active: $route.name === 'CreatePost' }" :to="{ name: 'CreatePost' }">Create Post</router-link>
+          </li>
+
+
           <li v-if="!user" class="nav-item ms-lg-3">
             <button class="social-pill">
               <img src="../assets/images/blogitIcon.png" alt="User Icon" class="social-pill__icon" />
@@ -117,7 +136,7 @@ export default {
                   </router-link>
                 </div>
                 <div class="option">
-                  <router-link v-if="admin" class="nav-link" to="#">
+                  <router-link v-if="isAdmin" class="nav-link" to="/admin">
                     <i class="fa-solid fa-user-shield"></i>
                     <span>Admin</span>
                   </router-link>

@@ -1,15 +1,20 @@
 <script>
 import { auth } from './firebase/firebaseConfig'
 import { onAuthStateChanged } from 'firebase/auth';
+import { mapState } from 'vuex'
 import Loading from '@/components/Loading.vue';
+
 
 export default {
   name: 'App',
-  components: { Loading },
-  data() {
-    return { isLoading: false };
+  components: {
+    Loading
   },
-  created() {
+  computed: {
+    ...mapState(['loading'])
+  },
+  async created() {
+
     onAuthStateChanged(auth, async (user) => {
       this.$store.commit('updateUser', user)
 
@@ -17,13 +22,15 @@ export default {
         await this.$store.dispatch('getCurrentUser', user)
         console.log('Vuex email:', this.$store.state.profileEmail)
       }
-    })
+    });
+    this.$store.dispatch('getPost');
   },
+
 };
 </script>
 
 <template>
+  <Loading v-if="loading" />
   <router-view />
-<!--  <Loading v-if="isLoading" />-->
 </template>
 

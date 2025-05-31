@@ -1,112 +1,155 @@
-<script >
-import Footer from "@/components/Footer.vue";
+<script>
+import Navbar  from "@/components/Navbar.vue";
 import Loading from "@/components/Loading.vue";
-import Modal from "@/components/Modal.vue";
-import Navbar from "@/components/Navbar.vue";
-import { functions } from "../firebase/firebaseConfig";
-import { httpsCallable } from "firebase/functions";
-import { getAuth } from "firebase/auth"
+import Footer  from "@/components/Footer.vue";
 
-export default{
-  name: 'Admin',
-  components: {
-    Navbar,
-    Footer,
-    Loading,
-    Modal
-  },
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  serverTimestamp,
+  updateDoc
+} from "firebase/firestore";
+
+const auth = getAuth();
+const db   = getFirestore();
+
+export default {
+  name: "Admin",
+  components: { Navbar, Loading, Footer },
+
   data() {
     return {
-      adminEmail: '',
-      functionMsg: '',
-      error: null,
-      errorMsg: '',
-      modalActive: false,
+      adminEmail: "",
       loading: false,
+      error: "",
+      success: "",
+      loadingAuth: true,
+      isSuperAdmin: false,
     };
   },
+
+  mounted() {
+
+    const auth = getAuth();
+    const db   = getFirestore();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        this.isSuperAdmin = snap.exists() && snap.data().admin === true;
+      }
+      this.loadingAuth = false;
+    });
+  },
+
   methods: {
     async addAdmin() {
+      this.error   = "";
+      this.success = "";
       this.loading = true;
-      this.error = null;
+
+      const email = this.adminEmail.trim();
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        this.error   = "Please enter a valid email.";
+        this.loading = false;
+        return;
+      }
+
+      const currentEmail = auth.currentUser?.email;
+      if (email === currentEmail) {
+        this.error   = "You cannot add yourself.";
+        this.loading = false;
+        return;
+      }
 
       try {
-        console.log("Admin email being sent:", this.adminEmail);
-        const auth = getAuth();
+        const db = getFirestore();
 
-        if (!auth.currentUser) {
-          throw new Error("You must be logged in to assign admin roles.");
+        const usersSnap = await getDocs(
+            query(
+                collection(db, "users"),
+                where("email", "==", email)
+            )
+        );
+
+        if (usersSnap.empty) {
+          throw new Error("No user found with that email.");
         }
 
-        if (!this.adminEmail || typeof this.adminEmail !== "string") {
-          throw new Error("Email field is empty or invalid.");
-        }
+        const uid = usersSnap.docs[0].id;
 
+        // 2️⃣ write an admin doc at /admins/{uid}
+        await updateDoc(doc(db, "users", uid), {
+          admin: true
+        });
 
-        const addAdminRole = httpsCallable(functions, 'addAdminRole');
-        const result = await addAdminRole({ email: this.adminEmail.trim() });
-
-        if (!result || !result.data || !result.data.message) {
-          throw new Error("Function call failed or returned invalid data.");
-        }
-
-        this.modalTitle = 'Success';
-        this.modalMessage = result.data.message;
-        this.modalActive = true;
-      } catch (err) {
-        console.error('Admin error:', err);
-
-        // Handle Firebase HttpsError with readable message
-        const errorMessage = err?.message || err?.data?.message || 'Something went wrong.';
-        this.modalTitle = 'Error';
-        this.modalMessage = errorMessage;
-        this.modalActive = true;
-        this.error = true;
-        this.errorMsg = errorMessage;
+        this.success    = `${email} is now an admin!`;
+        this.adminEmail = "";
+      } catch (e) {
+        console.error(e);
+        this.error = e.message;
       } finally {
         this.loading = false;
-        this.adminEmail = '';
       }
-    },
-    handleModalClose() {
-      this.modalActive = false;
     }
-
   }
-}
+};
 </script>
 
 <template>
   <Navbar/>
+
   <div class="admin-page">
-    <Modal v-if="modalActive" :modal-title="modalTitle" :modal-message="modalMessage" @close-modal="handleModalClose"/>
-    <Loading v-if="loading"/>
-    <div class="admin-wrap">
-      <div class="admin-header">
-        <img src="@/assets/images/blogitLogo.png" alt="Logo" class="logo"/>
-        <div class="admin-title">Admin Settings</div>
-      </div>
-      <div class="admin-subtitle">Enter email to make them admin</div>
+    <!-- loading spinner while auth check or submit -->
+    <Loading v-if="loadingAuth || loading"/>
 
-      <form @submit.prevent="addAdmin">
-        <div class="admin-input">
-          <input
-              type="email"
-              v-model="adminEmail"
-              placeholder="Email"
-              required
-          />
+    <div class="admin-wrap" v-else>
+      <!-- only super-admin sees the form -->
+      <div v-if="isSuperAdmin">
+        <div class="admin-header">
+          <img src="@/assets/images/blogitLogo.png" class="logo" alt="Logo"/>
+          <div class="admin-title">Admin Settings</div>
         </div>
+        <p class="admin-subtitle">Enter email to make them admin</p>
 
-        <div v-if="error" class="error">{{ errorMsg }}</div>
+        <form @submit.prevent="addAdmin">
+          <div class="admin-input">
+            <input
+                type="email"
+                v-model="adminEmail"
+                placeholder="Email"
+                required
+            />
+          </div>
 
-        <button type="submit" class="admin-button">SUBMIT</button>
-      </form>
+          <div v-if="error"   class="error">{{ error }}</div>
+          <div v-else-if="success" class="success">{{ success }}</div>
 
+          <button
+              type="submit"
+              class="admin-button"
+              :disabled="loading"
+          >
+            {{ loading ? "Working…" : "SUBMIT" }}
+          </button>
+        </form>
+      </div>
+
+      <!-- if not a super-admin -->
+      <div v-else>
+        <p>You do not have permission to access this page.</p>
+      </div>
     </div>
   </div>
-  <Footer/>
 
+  <Footer/>
 </template>
 
 <style scoped lang="scss">
@@ -123,9 +166,9 @@ $white: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg')
-  no-repeat center/cover;
+  background: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg') no-repeat center/cover;
   position: relative;
+
   &::before {
     content: '';
     position: absolute;
@@ -144,7 +187,6 @@ $white: #fff;
   background: $primary-bg;
   border-radius: 8px;
   color: $white;
-  margin: 0 auto;
 
   .admin-header {
     display: flex;
@@ -152,7 +194,10 @@ $white: #fff;
     justify-content: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    .logo { width: 32px; height: 32px; }
+
+    .logo {
+      width: 32px; height: 32px;
+    }
     .admin-title {
       font-size: 1.5rem;
       font-weight: 700;
@@ -168,7 +213,7 @@ $white: #fff;
 
   .admin-input {
     margin-bottom: 1rem;
-    position: relative;
+
     input {
       width: 100%;
       padding: 0.75rem 1rem;
@@ -178,7 +223,10 @@ $white: #fff;
       color: $white;
       font-size: 1rem;
       outline: none;
-      &::placeholder { color: $placeholder-color; }
+
+      &::placeholder {
+        color: $placeholder-color;
+      }
     }
   }
 
@@ -193,10 +241,16 @@ $white: #fff;
     font-weight: 700;
     cursor: pointer;
     transition: background 0.3s;
-    margin-bottom: 1rem;
     text-transform: uppercase;
+    margin-top: 1rem;
 
-    &:hover { background: $button-bg-hover; }
+    &:hover {
+      background: $button-bg-hover;
+    }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   .error {
@@ -205,6 +259,10 @@ $white: #fff;
     text-align: center;
   }
 
+  .success {
+    color: #b3ffb3;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
 }
-
 </style>

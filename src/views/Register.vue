@@ -38,6 +38,8 @@ export default {
           username: this.username,
           email: this.email,
           bio: this.bio,
+          admin: false,
+          createdAt: new Date(),
         })
 
         this.$router.push({ name: 'Login' })

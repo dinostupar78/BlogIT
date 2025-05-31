@@ -5,7 +5,14 @@ import Register from '@/views/Register.vue'
 import ForgotPass from "@/views/ForgotPass.vue";
 import Profile from "@/views/Profile.vue";
 import Admin from "@/views/Admin.vue";
-import CreatePost from "@/views/CreatePost.vue";
+import CreateBlog from "@/views/CreateBlog.vue";
+import BlogPreview from "@/views/BlogPreview.vue";
+import ViewBlog from "@/views/ViewBlog.vue";
+import Blogs from "@/views/Blogs.vue";
+import CategoryView from "@/views/CategoryView.vue";
+import EditBlog from "@/views/EditBlog.vue";
+import store from "@/store/index.js";
+
 
 
 const routes = [
@@ -16,6 +23,20 @@ const routes = [
         meta: {
             title: 'Home',
         },
+    },
+    {
+        path: '/blogs',
+        name: 'Blogs',
+        component: Blogs,
+        meta: {
+            title: 'Blogs',
+        },
+    },
+    {
+        path: '/category/:name',
+        name: 'Category',
+        component: CategoryView,
+        props: true
     },
     {
         path: '/profile',
@@ -58,11 +79,35 @@ const routes = [
         },
     },
     {
-        path: '/createPost',
+        path: '/create-post',
         name: 'CreatePost',
-        component: CreatePost,
+        component: CreateBlog,
         meta : {
-            title: 'CreatePost',
+            title: 'CreateBlog',
+        },
+    },
+    {
+        path: '/blog-preview',
+        name: 'BlogPreview',
+        component: BlogPreview,
+        meta : {
+            title: 'BlogPreview',
+        },
+    },
+    {
+        path: '/view-blog/:blogid',
+        name: 'ViewBlog',
+        component: ViewBlog,
+        meta : {
+            title: 'ViewBlog',
+        },
+    },
+    {
+        path: '/edit-blog/:blogid',
+        name: 'EditBlog',
+        component: EditBlog,
+        meta : {
+            title: 'EditBlog',
         },
     },
 
@@ -75,9 +120,16 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
+    store.commit('setLoading', true)
+    document.title = to.meta.title || 'PWA'
 
-    document.title = `PWA`;
-    next();
+    next()
 })
+
+router.afterEach(() => {
+    setTimeout(() => store.commit('setLoading', false), 400)
+})
+
+
 
 export default router
