@@ -76,7 +76,8 @@ export default {
       return this.$route.name === 'Blogs' ||
           this.$route.name === 'Category' ||
           this.$route.name === 'BlogPreview' ||
-          this.$route.name === 'ViewBlog'
+          this.$route.name === 'ViewBlog' ||
+          this.$route.name === 'About'
     },
     logoSrc() {
       return this.hoverLogo ? blogitLogoBlue : blogitLogo;
