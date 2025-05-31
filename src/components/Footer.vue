@@ -1,4 +1,20 @@
-<script setup>
+<script>
+
+export default {
+  name: "Footer",
+  data() {
+    return {};
+  },
+  methods: {
+    handleHomeClick() {
+      if (this.$route.name === 'Home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        this.$router.push({ name: 'Home' });
+      }
+    }
+  }
+};
 
 </script>
 
@@ -16,20 +32,34 @@
         <div class="col-md-3">
           <h6>Categories</h6>
           <ul class="footer-links">
-            <li><a href="https://en.wikipedia.org/wiki/HTML">HTML</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/CSS">CSS</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/PHP">PHP</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/MySQL">MySQL</a></li>
+            <li><router-link to="/category/news" @click.prevent="handleHomeClick">News</router-link></li>
+            <li><router-link to="/category/tech">Tech</router-link></li>
+            <li><router-link to="/category/health">Health</router-link></li>
+            <li><router-link to="/category/lifestyle">Lifestyle</router-link></li>
+            <li><router-link to="/category/finance">Finance</router-link></li>
+            <li><router-link to="/category/relationships">Relationships</router-link></li>
+
           </ul>
         </div>
 
         <div class="col-md-3">
           <h6>Quick Links</h6>
           <ul class="footer-links">
-            <li><a href="index.php">Home</a></li>
-            <li><a href="login.php">User</a></li>
-            <li><a href="blogs.php">Blogs</a></li>
-            <li><a href="about.php">About</a></li>
+            <li>
+              <router-link to="/" @click.prevent="handleHomeClick">Home</router-link>
+            </li>
+            <li>
+              <router-link to="/blogs">Blogs</router-link>
+            </li>
+            <li>
+              <router-link to="/about">About</router-link>
+            </li>
+            <li v-if="$store.state.user">
+              <router-link to="/create-post">Create Blog</router-link>
+            </li>
+            <li v-else>
+              <router-link to="/login">Sign In</router-link>
+            </li>
           </ul>
         </div>
       </div>
@@ -90,6 +120,18 @@
   .copyright-text {
     margin: 0;
     font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-links li .router-link-active {
+    color: #bbb;
+    pointer-events: none;
+  }
+
+  .footer-links li .router-link-active:hover {
+    color: #bbb;
+    cursor: default;
   }
 }
 

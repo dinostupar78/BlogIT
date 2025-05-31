@@ -20,7 +20,6 @@ export default createStore({
         profileLastName:   null,
         profileUsername:   null,
         profileInitials:   null,
-        profileAdmin:      null,
         loading:           false,
     },
     getters: {
@@ -72,9 +71,6 @@ export default createStore({
         updateUser(state, user) {
             state.user = user
         },
-        setProfileAdmin(state, isAdmin) {
-            state.profileAdmin = isAdmin
-        },
         setProfileInfo(state, doc) {
             const d = doc.data()
             state.profileId = doc.id
@@ -118,15 +114,6 @@ export default createStore({
             commit('setProfileInfo', snapshot)
             commit('setProfileInitials')
 
-            try{
-                const token = await auth.currentUser.getIdTokenResult();
-                const admin = token.claims.admin;
-                commit('setProfileAdmin', admin);
-
-            } catch (error) {
-                console.error('Error fetching custom claims:', err);
-                commit('setProfileAdmin', false);
-            }
         },
         async updateUserSettings({ commit, state }) {
             const user = auth.currentUser;

@@ -1,7 +1,9 @@
 <script>
 import {auth, db} from '@/firebase/firebaseConfig';
 import {onAuthStateChanged, signOut} from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+import blogitLogo from '@/assets/images/blogitLogo.png';
+import blogitLogoBlue from '@/assets/images/blogitLogoBlue.png';
 
 
 export default {
@@ -12,6 +14,7 @@ export default {
       isScrolled: false,
       isAdmin: false,
       authUser: null,
+      hoverLogo: false,
     };
   },
   mounted() {
@@ -29,8 +32,6 @@ export default {
       }
     });
 
-
-
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -46,6 +47,11 @@ export default {
     handleClickOutside(e) {
       if (this.$refs.profile && !this.$refs.profile.contains(e.target)) {
         this.profileMenu = false;
+      }
+    },
+    handleLogoClick() {
+      if (this.$route.name === 'Home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
     signOut() {
@@ -71,7 +77,10 @@ export default {
           this.$route.name === 'Category' ||
           this.$route.name === 'BlogPreview' ||
           this.$route.name === 'ViewBlog'
-    }
+    },
+    logoSrc() {
+      return this.hoverLogo ? blogitLogoBlue : blogitLogo;
+    },
 
 
   }
@@ -83,9 +92,11 @@ export default {
 <template>
   <nav :class="['navbar navbar-expand-lg fixed-top', { 'navbar-scrolled': isScrolled || isAlwaysScrolled}]">
     <div class="container">
-      <router-link class="navbar-brand d-flex align-items-center gap-2" :to="{ name: 'Home' }">
-        <img src="../assets/images/blogitLogo.png" class="logo-img" />
-        <span>BLOGIT</span>
+      <router-link class="navbar-brand d-flex align-items-center gap-2" :to="{ name: 'Home' }"
+                   @click.native.prevent="handleLogoClick" @mouseenter="hoverLogo = true"
+                   @mouseleave="hoverLogo = false">
+        <img :src="logoSrc" class="logo-img" />
+        <span :class="{ 'hovered-text': hoverLogo }">BLOGIT</span>
       </router-link>
       <button
           class="navbar-toggler"
@@ -105,15 +116,18 @@ export default {
             <router-link class="nav-link" :class="{ active: $route.name === 'Blogs' }" :to="{ name: 'Blogs' }">Blogs</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link " :class="{ active: $route.name === 'CreatePost' }" :to="{ name: 'CreatePost' }">Create Post</router-link>
+            <router-link class="nav-link " :class="{ active: $route.name === 'About' }" :to="{ name: 'About' }">About</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link v-if="user" class="nav-link " :class="{ active: $route.name === 'CreatePost' }" :to="{ name: 'CreatePost' }">Create Blog</router-link>
           </li>
 
 
           <li v-if="!user" class="nav-item ms-lg-3">
-            <button class="social-pill">
-              <img src="../assets/images/blogitIcon.png" alt="User Icon" class="social-pill__icon" />
-              Login/Register
-            </button>
+            <router-link to="/login" class="social-pill-link">
+              <font-awesome-icon icon="right-to-bracket" class="social-pill__icon" />
+              Sign In
+            </router-link>
           </li>
           <li v-if="user" @click.stop="toggleProfileMenu" class="profile" ref="profile">
             <span>{{ $store.state.profileInitials }}</span>
@@ -189,8 +203,15 @@ export default {
   height: 40px;
   width: auto;
   margin-right: -6px;
-  filter: none;
-  transition: none;
+  transition: filter 0.3s;
+}
+
+.navbar-brand span {
+  transition: color 0.3s;
+}
+
+.navbar-brand .hovered-text {
+  color: #0d6efd;
 }
 
 .navbar-nav {
@@ -326,30 +347,35 @@ export default {
   filter: invert(1);
 }
 
-.social-pill {
+.social-pill-link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 1rem;
-  border: none;
   border-radius: 30px;
   background: #fff;
-  color: #333;
+  color: #000;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
 
-  &__icon {
+  .social-pill__icon {
     width: 1rem;
     height: 1rem;
-    object-fit: contain;
+    transition: color 0.3s;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background: #0d6efd;
+    color: #fff;
+
+    .social-pill__icon {
+      color: #fff;
+    }
   }
 }
+
 
 @media (max-width: 991px) {
   .navbar {

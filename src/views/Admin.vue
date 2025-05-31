@@ -12,8 +12,6 @@ import {
   query,
   where,
   getDocs,
-  setDoc,
-  serverTimestamp,
   updateDoc
 } from "firebase/firestore";
 
@@ -85,7 +83,6 @@ export default {
 
         const uid = usersSnap.docs[0].id;
 
-        // 2️⃣ write an admin doc at /admins/{uid}
         await updateDoc(doc(db, "users", uid), {
           admin: true
         });

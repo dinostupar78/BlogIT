@@ -12,6 +12,7 @@ import Blogs from "@/views/Blogs.vue";
 import CategoryView from "@/views/CategoryView.vue";
 import EditBlog from "@/views/EditBlog.vue";
 import store from "@/store/index.js";
+import About from "@/views/About.vue";
 
 
 
@@ -30,6 +31,22 @@ const routes = [
         component: Blogs,
         meta: {
             title: 'Blogs',
+        },
+    },
+    {
+        path: '/create-post',
+        name: 'CreatePost',
+        component: CreateBlog,
+        meta : {
+            title: 'CreateBlog',
+        },
+    },
+    {
+        path: '/about',
+        name: 'About',
+        component: About,
+        meta : {
+            title: 'About',
         },
     },
     {
@@ -76,14 +93,6 @@ const routes = [
         component: Register,
         meta : {
             title: 'Register',
-        },
-    },
-    {
-        path: '/create-post',
-        name: 'CreatePost',
-        component: CreateBlog,
-        meta : {
-            title: 'CreateBlog',
         },
     },
     {

@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faUserShield } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserShield, faRightToBracket  } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import QuillEditor from 'vue3-quill'
@@ -23,7 +23,7 @@ import ImageUploader from 'quill-image-uploader'
 Quill.register('modules/resize', ResizeModule)
 Quill.register('modules/imageUploader', ImageUploader)
 
-library.add(faUser, faUserShield)
+library.add(faUser, faUserShield, faRightToBracket )
 
 
 let app;
