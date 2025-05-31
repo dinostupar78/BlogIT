@@ -99,13 +99,14 @@ export default createStore({
         }
     },
     actions: {
-        async getCurrentUser({ commit }, user) {
-            const uid = auth.currentUser?.uid
-            if (!uid) {
-                console.error('No user signed in!')
-                return
+        async getCurrentUser({ commit }) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.error('No user signed in!');
+                return;
             }
 
+            const uid = user.uid;
             const userDocRef = doc(db, 'users', uid)
             const snapshot   = await getDoc(userDocRef)
 
@@ -116,18 +117,25 @@ export default createStore({
 
             commit('setProfileInfo', snapshot)
             commit('setProfileInitials')
-            const token = await user.getIdTokenResult();
-            const admin = token.claims.admin;
-            commit('setProfileAdmin', admin);
+
+            try{
+                const token = await auth.currentUser.getIdTokenResult();
+                const admin = token.claims.admin;
+                commit('setProfileAdmin', admin);
+
+            } catch (error) {
+                console.error('Error fetching custom claims:', err);
+                commit('setProfileAdmin', false);
+            }
         },
         async updateUserSettings({ commit, state }) {
-            const uid = auth.currentUser?.uid
-            if (!uid) {
-                console.error('No user signed in!')
-                return
+            const user = auth.currentUser;
+            if (!user) {
+                console.error('No user signed in!');
+                return;
             }
 
-            const userDocRef = doc(db, 'users', uid)
+            const userDocRef = doc(db, 'users', user.uid)
             const userData = {
                 firstName: state.profileFirstName,
                 lastName: state.profileLastName,

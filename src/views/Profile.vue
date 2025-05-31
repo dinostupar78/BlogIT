@@ -2,6 +2,9 @@
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
 import Modal from "@/components/Modal.vue";
+import {auth, db} from '@/firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 export default {
@@ -13,6 +16,24 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getCurrentUser");
+
+    onAuthStateChanged(auth, async user => {
+      if (user) {
+        try {
+          const userSnap = await getDoc(doc(db, "users", user.uid));
+          if (userSnap.exists() && userSnap.data().admin === true) {
+            this.isAdmin = true;
+          } else {
+            this.isAdmin = false;
+          }
+        } catch (err) {
+          console.error("Error fetching admin flag:", err);
+          this.isAdmin = false;
+        }
+      } else {
+        this.isAdmin = false;
+      }
+    });
   },
   data() {
     return {
@@ -21,6 +42,7 @@ export default {
       modalTitle: "Success",
       modalMessage: "Changes saved successfully!",
       modalActive: false,
+      isAdmin: false,
     };
   },
   methods: {
@@ -85,9 +107,9 @@ export default {
       </div>
       <div class="profile-avatar">
         <div class="initials">{{ $store.state.profileInitials }}</div>
-        <div class="admin-badge">
-          <i class="fa fa-user-shield"></i>
-          <span>Admin</span>
+        <div class="admin-badge" >
+          <font-awesome-icon :icon="isAdmin ? 'user-shield' : 'user'" />
+          <span>{{ isAdmin ? ' Admin' : ' User' }}</span>
         </div>
       </div>
       <form @submit.prevent="updateProfile">
@@ -270,6 +292,11 @@ $white: #fff;
       border: 1px rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(4px);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+      i {
+        /* Ensure the icon is the correct size */
+        font-size: 14px;
+      }
     }
   }
 
