@@ -46,7 +46,11 @@ export default {
           <h6>Quick Links</h6>
           <ul class="footer-links">
             <li>
-              <router-link to="/" @click.prevent="handleHomeClick">Home</router-link>
+              <router-link
+                  to="/"
+                  class="footer-home-link"
+                  @click.prevent="handleHomeClick"
+              >Home</router-link>
             </li>
             <li>
               <router-link to="/blogs">Blogs</router-link>
@@ -124,14 +128,17 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .footer-links li .router-link-active {
-    color: #bbb;
-    pointer-events: none;
+  .footer-links a.router-link-active,
+  .footer-links a.router-link-exact-active {
+    color: #bbb !important;
+    cursor: default;
   }
 
-  .footer-links li .router-link-active:hover {
-    color: #bbb;
-    cursor: default;
+  .footer-links a:focus,
+  .footer-links a:active {
+    color: #bbb !important;
+    outline: none;
+    box-shadow: none;
   }
 }
 
