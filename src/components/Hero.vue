@@ -6,7 +6,9 @@
   <div
       id="carouselExampleIndicators"
       class="carousel slide"
-      data-bs-ride="carousel">
+      data-bs-ride="carousel"
+      data-bs-interval="5000">
+
     <div class="carousel-indicators">
       <button
           type="button"
@@ -36,12 +38,15 @@
             class="d-block w-100"
             alt="First slide"
         />
-        <div class="carousel-caption ">
-          <h5>Slider One Item</h5>
+        <div class="carousel-caption">
+          <h5>Welcome to BlogIT</h5>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime,
-            nulla, tempore. Deserunt excepturi quas vero.
+            Discover the latest articles, stories and inspiration
+            from the world of lifestyle, technology and personal growth.
           </p>
+          <router-link to="/blogs" class="carousel-btn mt-3">
+            Start Blogging Now
+          </router-link>
         </div>
       </div>
       <div class="carousel-item">
@@ -51,11 +56,13 @@
             alt="Second slide"
         />
         <div class="carousel-caption ">
-          <h5>Slider Two Item</h5>
+          <h5>Become a successful blogger</h5>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime,
-            nulla, tempore. Deserunt excepturi quas vero.
+            Everything you need in one place
           </p>
+          <router-link to="/blogs" class="carousel-btn mt-3">
+            Create Your Blog Today
+          </router-link>
         </div>
       </div>
       <div class="carousel-item">
@@ -65,11 +72,13 @@
             alt="Third slide"
         />
         <div class="carousel-caption ">
-          <h5>Slider Three Item</h5>
+          <h5>Everything about us</h5>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime,
-            nulla, tempore. Deserunt excepturi quas vero.
+            Everything you need to know about us is on one place
           </p>
+          <router-link to="/about" class="carousel-btn mt-3">
+            Find Here
+          </router-link>
         </div>
       </div>
     </div>
@@ -101,11 +110,13 @@
   height: 100vh;
   object-fit: cover;
   object-position: center;
-  filter: brightness(0.6);
+  filter: brightness(0.4);
 }
 
 .carousel-caption {
-  bottom: 20%;
+  bottom: 25%;
+  transform: translateY(-20px);
+  font-family: "Times New Roman", serif;
 
   h5 {
     font-size: calc(1.5rem + 1vw);
@@ -122,13 +133,37 @@
   }
 }
 
+.carousel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  color: #26272b;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.carousel-btn:hover {
+  background-color: #0d6efd;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.carousel-btn:active {
+  transform: scale(0.98);
+}
+
 @media (max-width: 992px) {
   .carousel-item img {
     height: 70vh;
   }
 
   .carousel-caption {
-    bottom: 18%;  /* move it up just a little */
+    bottom: 20%;
 
     h5 {
       font-size: calc(1.25rem + 1vw);
@@ -138,6 +173,10 @@
       font-size: calc(0.9rem + 0.5vw);
       width: 90%;
     }
+  }
+  .carousel-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.25rem;
   }
 }
 
@@ -160,6 +199,12 @@
       line-height: 1.6;
       padding: 0 1rem;
     }
+  }
+
+  .carousel-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+
   }
 }
 

@@ -2,7 +2,7 @@
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import { auth, db } from '../firebase/firebaseConfig'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword} from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
 
 
@@ -47,15 +47,18 @@ export default {
         this.error = true
         this.errorMsg = err.message
       }
+    },
+    togglePassword(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.type = el.type === 'password' ? 'text' : 'password';
+      }
     }
 
   }
 };
 
-function togglePassword() {
-  const p = document.getElementById('pass');
-  p.type = p.type === 'password' ? 'text' : 'password';
-}
+
 </script>
 
 <template>
@@ -68,7 +71,6 @@ function togglePassword() {
       </div>
 
       <form>
-        <!-- two‐column row -->
         <div class="row">
           <div class="form-input col-sm-6">
             <input type="text" placeholder="First Name" v-model="firstName"/>
@@ -78,7 +80,6 @@ function togglePassword() {
           </div>
         </div>
 
-        <!-- full‐width fields -->
         <div class="form-input">
           <input type="text" placeholder="Username" v-model="username" required />
         </div>
@@ -86,48 +87,34 @@ function togglePassword() {
           <input type="email" placeholder="Email" v-model="email" required />
         </div>
 
-        <!-- two‐column password fields -->
         <div class="row">
           <div class="form-input col-sm-6">
             <input type="password" placeholder="Password" id="pass" v-model="password" required />
-            <span class="toggle-pass" @click="togglePassword">👁️</span>
+            <span class="toggle-pass" @click="togglePassword('pass')">👁️</span>
           </div>
           <div class="form-input col-sm-6">
-            <input type="password" placeholder="Confirm Password" v-model="confirmPassword" required />
+            <input type="password" placeholder="Confirm Password" id="confPass" v-model="confirmPassword" required />
+            <span class="toggle-pass" @click="togglePassword('confPass')">👁️</span>
           </div>
         </div>
 
-        <!-- bio textarea -->
         <div class="form-input">
           <textarea placeholder="Bio (About you in a few sentences)" v-model="bio"></textarea>
         </div>
 
 
 
-        <!-- error -->
         <div v-show="error" class="error">
           {{ this.errorMsg }}
         </div>
 
         <button @click.prevent="register" class="form-button" type="submit">CREATE ACC</button>
 
-        <div class="form-options">
-<!--          <label><input type="checkbox" /> Remember Me</label>-->
-        </div>
-        <div class="social-separator"><span>Or Create Acc With</span></div>
+
+        <div class="social-separator"><span>Have an account?</span></div>
         <div class="social-buttons">
-          <button class="social-btn google">
-            <img src="https://img.icons8.com/color/48/000000/google-logo.png"
-                 alt="Google Logo" width="20" height="20" />
-            <span>Create with Google</span>
-          </button>
-          <button class="social-btn x">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                 fill="currentColor" viewBox="0 0 16 16">
-              <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-            </svg>
-            <span>Create with X</span>
-          </button>
+          <router-link to="/login" class="form-login-button">GO TO LOGIN</router-link>
+
         </div>
 
 
@@ -268,6 +255,24 @@ $white: #fff;
 
       &:hover {
         background: $btn-bg-hover;
+      }
+    }
+
+    .form-login-button{
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: $btn-bg;
+      color: $text-color;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 1);
       }
     }
 

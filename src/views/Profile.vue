@@ -93,17 +93,17 @@ export default {
 
 <template>
   <Navbar />
-  <div class="admin-page">
+  <div class="login-page">
     <Modal
       v-if="modalActive"
       :modalTitle="modalTitle"
       :modalMessage="modalMessage"
       v-on:close-modal="closeModal"
       @close-modal="showModal = false" />
-    <div class="admin-wrap">
-      <div class="admin-header">
+    <div class="login-wrap">
+      <div class="login-header">
         <img src="../assets//images/blogitLogo.png" alt="Logo" class="logo" />
-        <div class="admin-title">Account Settings</div>
+        <div class="login-title">Account Settings</div>
       </div>
       <div class="profile-avatar">
         <div class="initials">{{ $store.state.profileInitials }}</div>
@@ -113,21 +113,21 @@ export default {
         </div>
       </div>
       <form @submit.prevent="updateProfile">
-        <div class="admin-input">
+        <div class="login-input">
           <input type="text" placeholder="First Name" v-model="firstName" required />
         </div>
-        <div class="admin-input">
+        <div class="login-input">
           <input type="text" placeholder="Last Name" v-model="lastName" required />
         </div>
-        <div class="admin-input">
+        <div class="login-input">
           <input type="text" placeholder="Username" v-model="username" required />
         </div>
-        <div class="admin-input">
+        <div class="login-input">
           <input disabled type="text" placeholder="Email" v-model="email" required />
         </div>
 
 
-        <button type="submit" class="admin-button">SAVE CHANGES</button>
+        <button type="submit" class="login-button">SAVE CHANGES</button>
 
       </form>
     </div>
@@ -145,7 +145,7 @@ $text-color: #333;
 $separator-line: rgba(255, 255, 255, 0.5);
 $white: #fff;
 
-.admin-page {
+.login-page {
   min-height: 100vh;
   padding-top: 90px;
   padding-bottom: 40px;
@@ -169,7 +169,7 @@ $white: #fff;
   }
 }
 
-.admin-wrap {
+.login-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -185,7 +185,7 @@ $white: #fff;
     max-width: 90%;
   }
 
-  .admin-header {
+  .login-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,7 +198,7 @@ $white: #fff;
       object-fit: contain;
     }
 
-    .admin-title {
+    .login-title {
       font-size: 24px;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
@@ -212,7 +212,7 @@ $white: #fff;
     opacity: 0.9;
   }
 
-  .admin-input {
+  .login-input {
     position: relative;
     margin-bottom: 20px;
 
@@ -242,7 +242,7 @@ $white: #fff;
     }
   }
 
-  .admin-button {
+  .login-button {
     width: 100%;
     padding: 14px;
     border: none;

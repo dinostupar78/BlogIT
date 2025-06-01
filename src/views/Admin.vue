@@ -103,21 +103,21 @@ export default {
 <template>
   <Navbar/>
 
-  <div class="admin-page">
+  <div class="login-page">
     <!-- loading spinner while auth check or submit -->
     <Loading v-if="loadingAuth || loading"/>
 
-    <div class="admin-wrap" v-else>
+    <div class="login-wrap" v-else>
       <!-- only super-admin sees the form -->
       <div v-if="isSuperAdmin">
-        <div class="admin-header">
+        <div class="login-header">
           <img src="@/assets/images/blogitLogo.png" class="logo" alt="Logo"/>
-          <div class="admin-title">Admin Settings</div>
+          <div class="login-title">Admin Settings</div>
         </div>
-        <p class="admin-subtitle">Enter email to make them admin</p>
+        <p class="login-subtitle">Enter email to make them admin</p>
 
         <form @submit.prevent="addAdmin">
-          <div class="admin-input">
+          <div class="login-input">
             <input
                 type="email"
                 v-model="adminEmail"
@@ -131,7 +131,7 @@ export default {
 
           <button
               type="submit"
-              class="admin-button"
+              class="login-button"
               :disabled="loading"
           >
             {{ loading ? "Working…" : "SUBMIT" }}
@@ -158,7 +158,7 @@ $button-bg-hover: #ffb782;
 $text-color: #333;
 $white: #fff;
 
-.admin-page {
+.login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -175,7 +175,7 @@ $white: #fff;
   }
 }
 
-.admin-wrap {
+.login-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -185,7 +185,7 @@ $white: #fff;
   border-radius: 8px;
   color: $white;
 
-  .admin-header {
+  .login-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,20 +195,20 @@ $white: #fff;
     .logo {
       width: 32px; height: 32px;
     }
-    .admin-title {
+    .login-title {
       font-size: 1.5rem;
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0,0,0,0.7);
     }
   }
 
-  .admin-subtitle {
+  .login-subtitle {
     text-align: center;
     margin-bottom: 1.5rem;
     opacity: 0.9;
   }
 
-  .admin-input {
+  .login-input {
     margin-bottom: 1rem;
 
     input {
@@ -227,7 +227,7 @@ $white: #fff;
     }
   }
 
-  .admin-button {
+  .login-button {
     width: 100%;
     padding: 0.75rem;
     border: none;
