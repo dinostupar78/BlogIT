@@ -23,9 +23,12 @@ export default createStore({
         loading:           false,
     },
     getters: {
-        blogPostsFeed(state){
+        blogPostsCards(state){
             return state.blogPosts.slice(0, 3);
         },
+        blogPostsFeed(state){
+            return state.blogPosts.slice(3, 6);
+        }
     },
     mutations: {
         setLoading(state, value) {

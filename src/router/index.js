@@ -13,7 +13,11 @@ import CategoryView from "@/views/CategoryView.vue";
 import EditBlog from "@/views/EditBlog.vue";
 import store from "@/store/index.js";
 import About from "@/views/About.vue";
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getFirestore, doc, getDoc } from 'firebase/firestore'
 
+const auth = getAuth()
+const db   = getFirestore()
 
 
 const routes = [
@@ -23,6 +27,7 @@ const routes = [
         component: Home,
         meta: {
             title: 'Home',
+            requiresAuth: false,
         },
     },
     {
@@ -31,6 +36,7 @@ const routes = [
         component: Blogs,
         meta: {
             title: 'Blogs',
+            requiresAuth: false,
         },
     },
     {
@@ -39,6 +45,8 @@ const routes = [
         component: CreateBlog,
         meta : {
             title: 'CreateBlog',
+            requiresAuth: true,
+            requiresAdmin: true,
         },
     },
     {
@@ -47,13 +55,18 @@ const routes = [
         component: About,
         meta : {
             title: 'About',
+            requiresAuth: false,
         },
     },
     {
         path: '/category/:name',
         name: 'Category',
         component: CategoryView,
-        props: true
+        props: true,
+        meta : {
+            title: 'Category',
+            requiresAuth: false,
+        },
     },
     {
         path: '/profile',
@@ -61,6 +74,7 @@ const routes = [
         component: Profile,
         meta : {
             title: 'Profile',
+            requiresAuth: true,
         },
     },
     {
@@ -69,6 +83,8 @@ const routes = [
         component: Admin,
         meta : {
             title: 'admin',
+            requiresAuth: true,
+            requiresAdmin: true,
         },
     },
     {
@@ -77,6 +93,7 @@ const routes = [
         component: ForgotPass,
         meta : {
             title: 'ForgotPassword',
+            requiresAuth: false,
         },
     },
     {
@@ -85,6 +102,7 @@ const routes = [
         component: Login,
         meta : {
             title: 'Login',
+            requiresAuth: false,
         },
     },
     {
@@ -93,6 +111,8 @@ const routes = [
         component: Register,
         meta : {
             title: 'Register',
+            requiresAuth: false,
+
         },
     },
     {
@@ -101,6 +121,8 @@ const routes = [
         component: BlogPreview,
         meta : {
             title: 'BlogPreview',
+            requiresAuth: true,
+            requiresAdmin: true,
         },
     },
     {
@@ -109,6 +131,7 @@ const routes = [
         component: ViewBlog,
         meta : {
             title: 'ViewBlog',
+            requiresAuth: false,
         },
     },
     {
@@ -117,6 +140,8 @@ const routes = [
         component: EditBlog,
         meta : {
             title: 'EditBlog',
+            requiresAuth: true,
+            requiresAdmin: true,
         },
     },
 
@@ -127,18 +152,64 @@ const router = createRouter({
     routes,
 })
 
+function waitForAuthInitialization() {
+    return new Promise((resolve) => {
+        if (auth.currentUser !== null) {
+            return resolve()
+        }
 
-router.beforeEach((to, from, next) => {
+        const unsubscribe = onAuthStateChanged(auth, () => {
+            unsubscribe()
+            resolve()
+        })
+    })
+}
+
+router.beforeEach(async (to, from, next) => {
     store.commit('setLoading', true)
-    document.title = to.meta.title || 'PWA'
+    document.title = `BlogIT`;
 
-    next()
+    await waitForAuthInitialization()
+
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
+    const user = auth.currentUser
+
+    if (requiresAuth && !user) {
+        store.commit('setLoading', false)
+        return next({ name: 'Home' })
+    }
+
+    if (requiresAdmin) {
+        if (!user) {
+            store.commit('setLoading', false)
+            return next({ name: 'Home' })
+        }
+
+        try {
+            const docRef = doc(db, 'users', user.uid)
+            const snap = await getDoc(docRef)
+            const isAdmin = snap.exists() && snap.data().admin === true
+
+            if (!isAdmin) {
+                store.commit('setLoading', false)
+                return next({ name: 'Home' })
+            }
+        } catch (err) {
+            console.error('Error fetching admin flag:', err)
+            store.commit('setLoading', false)
+            return next({ name: 'Home' })
+        }
+    }
+
+    return next()
 })
+
+
 
 router.afterEach(() => {
     setTimeout(() => store.commit('setLoading', false), 400)
 })
-
 
 
 export default router

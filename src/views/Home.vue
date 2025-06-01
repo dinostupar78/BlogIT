@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar.vue";
 import Hero from "@/components/Hero.vue";
 import Footer from "@/components/Footer.vue";
 import BlogCard from "@/components/BlogCard.vue";
+import BlogPost from "@/components/BlogPost.vue";
 import {auth, db} from '@/firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -11,6 +12,7 @@ export default {
   name: 'Home',
   components: {
     BlogCard,
+    BlogPost,
     Navbar,
     Hero,
     Footer
@@ -41,14 +43,23 @@ export default {
   data() {
     return {
       isEditing: false,
-      isAdmin: false
+      isAdmin: false,
+      screenData: {
+        title: "Welcome!",
+        blogPost:
+            "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
+        photo: "welcome-image",
+      },
     };
   },
   methods: {
   },
   computed: {
-    recentPosts() {
-      return this.$store.getters.blogPostsFeed
+    blogPostsCards(){
+      return this.$store.getters.blogPostsCards
+    },
+    blogPostsFeed(){
+      return this.$store.getters.blogPostsFeed2
     }
 
   }
@@ -61,10 +72,67 @@ export default {
   <Navbar />
   <Hero />
   <div>
-
-
     <div class="blog-card-wrap">
       <div class="container">
+        <section id="home-icons" class="py-5">
+          <div class="container">
+            <div class="row mb-4 g-4">
+              <!-- Card 1 -->
+              <div class="col-md-4 col-sm-6 col-12">
+                <div class="icon-card text-center">
+                  <div class="card-body">
+                    <img src="../assets/images/blogitImageIpad.png" alt="Easy to use icon" class="icon-img" />
+                    <h5 class="card-title mt-3">Easy to use</h5>
+                    <p class="card-text">
+                      BlogIT is an easy site to write your stories
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="col-md-4 col-sm-6 col-12">
+                <div class="icon-card text-center">
+                  <div class="card-body">
+                    <img src="../assets/images/blogitImageIphone.png" alt="For each device icon" class="icon-img" />
+                    <h5 class="card-title mt-3">For each device</h5>
+                    <p class="card-text">
+                      You can write your stories anytime, anywhere
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="col-md-4 col-sm-6 col-12">
+                <div class="icon-card text-center">
+                  <div class="card-body">
+                    <img src="../assets/images/blogitImageMac.png" alt="And it's free icon" class="icon-img" />
+                    <h5 class="card-title mt-3">And it's free!</h5>
+                    <p class="card-text">
+                      Sign up and become a part of the blogging community
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <h3>Recent Blogs</h3>
+        <BlogPost
+            v-for="(post, index) in blogPostsCards"
+            :key="post.blogID"
+            :postId="post.blogID"
+            :title="post.blogTitle"
+            :date="post.blogDate"
+            :tag="post.category"
+            :image="post.blogCoverPhoto"
+            :authorName="post.authorName"
+            :blogHTML="post.blogHTML"
+            :reverseLayout="index % 2 === 1"
+        />
+
         <h3>View More Recent Blogs</h3>
         <div class="toggle-edit-container" v-if="isAdmin">
           <span class="toggle-label">Toggle Editing Post</span>
@@ -75,7 +143,7 @@ export default {
         </div>
         <div class="blog-cards">
           <BlogCard
-              v-for="post in recentPosts"
+              v-for="post in blogPostsCards"
               :key="post.blogID"
               :post-id="post.blogID"
               :title="post.blogTitle"
@@ -180,10 +248,12 @@ export default {
 
   .blog-cards {
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
-    overflow-x: unset;
-    align-items: start;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    justify-items: center;
+    padding: 0 1rem;
+    max-width: 1200px;
+    margin: 0 auto 64px auto;
     margin-bottom: 64px;
   }
 
@@ -272,6 +342,80 @@ export default {
     .switch input:checked + .slider:before {
       transform: translateX(24px);
     }
+  }
+}
+
+#home-icons .icon-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  padding: 1.5rem 1rem;
+}
+
+/* Hover effect */
+#home-icons .icon-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  background-color: #f9f9f9;
+}
+
+/* Icon image sizing */
+#home-icons .icon-img {
+  max-width: 80px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+/* Title & text */
+#home-icons .card-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333333;
+}
+
+#home-icons .card-text {
+  font-size: 0.95rem;
+  color: #555555;
+  margin-top: 0.5rem;
+}
+
+/* Optional: ensure equal‐height cards if some text is longer */
+@media (min-width: 576px) {
+  #home-icons .col-sm-6,
+  #home-icons .col-md-4 {
+    display: flex;
+  }
+  #home-icons .icon-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+/* Media query tweaks (Bootstrap handles most, but you can adjust if needed) */
+@media (max-width: 767.98px) {
+  /* On small devices, reduce card padding a bit */
+  #home-icons .icon-card {
+    padding: 1.25rem 0.75rem;
+  }
+  #home-icons .card-title {
+    font-size: 1.15rem;
+  }
+  #home-icons .card-text {
+    font-size: 0.9rem; /* 0.9rem for smaller text */
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* On extra‐small phones, shrink icons slightly */
+  #home-icons .icon-img {
+    max-width: 60px;
+    margin-bottom: 0.5rem;
   }
 }
 

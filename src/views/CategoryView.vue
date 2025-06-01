@@ -116,7 +116,7 @@ export default {
   .blog-cards {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     overflow-x: unset;
     align-items: start;
     margin-bottom: 64px;
