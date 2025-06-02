@@ -42,7 +42,7 @@ export default {
           createdAt: new Date(),
         })
 
-        this.$router.push({ name: 'Login' })
+        this.$router.push({ name: 'Home' })
       } catch (err) {
         this.error = true
         this.errorMsg = err.message

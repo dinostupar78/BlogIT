@@ -46,7 +46,6 @@ const routes = [
         meta : {
             title: 'CreateBlog',
             requiresAuth: true,
-            requiresAdmin: true,
         },
     },
     {
@@ -122,7 +121,6 @@ const routes = [
         meta : {
             title: 'BlogPreview',
             requiresAuth: true,
-            requiresAdmin: true,
         },
     },
     {
