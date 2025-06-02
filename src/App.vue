@@ -20,7 +20,6 @@ export default {
 
       if (user) {
         await this.$store.dispatch('getCurrentUser', user)
-        console.log('Vuex email:', this.$store.state.profileEmail)
       }
     });
     this.$store.dispatch('getPost');

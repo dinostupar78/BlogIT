@@ -162,7 +162,6 @@ export default createStore({
                 });
 
                 state.postLoaded = true;
-                console.log(state.blogPosts);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
