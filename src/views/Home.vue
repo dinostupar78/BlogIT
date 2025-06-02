@@ -354,14 +354,12 @@ export default {
   padding: 1.5rem 1rem;
 }
 
-/* Hover effect */
 #home-icons .icon-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
   background-color: #f9f9f9;
 }
 
-/* Icon image sizing */
 #home-icons .icon-img {
   max-width: 80px;
   width: 100%;
@@ -370,7 +368,6 @@ export default {
   display: inline-block;
 }
 
-/* Title & text */
 #home-icons .card-title {
   font-size: 1.25rem;
   font-weight: 500;
@@ -383,7 +380,6 @@ export default {
   margin-top: 0.5rem;
 }
 
-/* Optional: ensure equal‐height cards if some text is longer */
 @media (min-width: 576px) {
   #home-icons .col-sm-6,
   #home-icons .col-md-4 {
@@ -397,9 +393,7 @@ export default {
   }
 }
 
-/* Media query tweaks (Bootstrap handles most, but you can adjust if needed) */
 @media (max-width: 767.98px) {
-  /* On small devices, reduce card padding a bit */
   #home-icons .icon-card {
     padding: 1.25rem 0.75rem;
   }
@@ -407,12 +401,11 @@ export default {
     font-size: 1.15rem;
   }
   #home-icons .card-text {
-    font-size: 0.9rem; /* 0.9rem for smaller text */
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 575.98px) {
-  /* On extra‐small phones, shrink icons slightly */
   #home-icons .icon-img {
     max-width: 60px;
     margin-bottom: 0.5rem;

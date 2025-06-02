@@ -294,7 +294,6 @@ $white: #fff;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
       i {
-        /* Ensure the icon is the correct size */
         font-size: 14px;
       }
     }

@@ -53,13 +53,11 @@ export default {
       class="blog-wrapper"
       :class="{ reverse: reverseLayout }"
   >
-    <!-- LEFT SIDE (or RIGHT if .reverse) -->
     <div class="blog-photo">
       <div class="green-slant"></div>
       <img class="tilted-image" :src="image" alt="Cover Photo" />
     </div>
 
-    <!-- RIGHT SIDE (or LEFT if .reverse) -->
     <div class="blog-content">
       <div class="text-container">
         <h2 class="blog-title">{{ title }}</h2>
@@ -76,21 +74,18 @@ export default {
 </template>
 
 <style scoped lang="scss">
-/* ────── 1) Wrapper: as a 600px‐tall section ────── */
 .blog-wrapper {
   display: flex;
   width: 100%;
   height: 600px;
-  margin: 2rem 0 4rem; /* <-- added top margin */
+  margin: 2rem 0 4rem;
   overflow: hidden;
 }
 
-/* If reverseLayout === true, flip the two halves horizontally (desktop only) */
 .blog-wrapper.reverse {
   flex-direction: row-reverse;
 }
 
-/* ────── 2) LEFT/RIGHT SIDE: Dark + green slant + tilted image ────── */
 .blog-photo {
   position: relative;
   flex: 1;
@@ -124,7 +119,6 @@ export default {
   }
 }
 
-/* ────── 3) RIGHT/LEFT SIDE: White background + text ────── */
 .blog-content {
   flex: 1;
   background: #ffffff;
@@ -169,9 +163,7 @@ export default {
   }
 }
 
-/* ────── 4) Responsive stacking on medium screens (tablets) ────── */
 @media (max-width: 1024px) {
-  /* Override both normal and "reverse" layouts so they stack vertically */
   .blog-wrapper,
   .blog-wrapper.reverse {
     flex-direction: column;
@@ -189,7 +181,6 @@ export default {
     overflow: hidden;
   }
 
-  /* Center the tilted image so it doesn’t hug one side */
   .blog-photo .tilted-image {
     position: absolute;
     top: 50%;
@@ -214,7 +205,6 @@ export default {
   }
 }
 
-/* ────── 5) Further shrink for phones (extra small) ────── */
 @media (max-width: 600px) {
   .blog-photo {
     height: 200px;

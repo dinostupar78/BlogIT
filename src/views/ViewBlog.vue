@@ -35,7 +35,6 @@ export default{
   <Navbar />
 
   <main class="post-view">
-    <!-- Main logic: render post if it exists -->
     <article v-if="post" class="container">
       <h1 class="post-title">{{ post.blogTitle }}</h1>
 
@@ -57,7 +56,6 @@ export default{
       <div class="post-content ql-editor" v-html="post.blogHTML"></div>
     </article>
 
-    <!-- Fallback if post not found -->
     <div v-else class="error">Sorry, that post was not found.</div>
   </main>
 
