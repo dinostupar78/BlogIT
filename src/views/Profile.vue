@@ -152,7 +152,7 @@ $white: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg');
+  background-image: url('../assets/images/blogitImage1.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;  position: relative;

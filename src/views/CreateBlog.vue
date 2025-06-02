@@ -146,6 +146,13 @@ export default{
 
         this.$store.commit('prependBlogPost', newPost)
 
+        this.$store.commit('updateBlogTitle', '');
+        this.$store.commit('updateBlogCategory', '');
+        this.$store.commit('newBlogPost', '');
+        this.$store.commit('updateBlogPhotoURL', '');
+        this.$store.commit('fileNameChange', '');
+        this.file = null;
+
         this.$router.push({
           name: 'ViewBlog',
           params: { blogid: newPostRef.id }
@@ -192,7 +199,6 @@ export default{
         <p><span>Error:</span>{{ this.errorMessage }}</p>
       </div>
 
-      <!-- Title -->
       <input
           type="text"
           placeholder="Enter Blog Title"
@@ -200,7 +206,6 @@ export default{
           class="blog-title"
       />
 
-      <!-- Upload Row -->
       <div class="upload-row">
         <label for="blog-photo" class="pill-button">Upload Cover Photo</label>
         <input
@@ -222,7 +227,6 @@ export default{
         </span>
       </div>
 
-      <!-- Category Selection -->
       <div class="category-select">
         <label for="category">Category:</label>
         <select id="category" v-model="blogCategory">
@@ -231,7 +235,6 @@ export default{
         </select>
       </div>
 
-      <!-- Quill Editor -->
       <div class="editor">
         <QuillEditor
             contentType="html"
@@ -242,11 +245,10 @@ export default{
         />
       </div>
 
-      <!-- Actions -->
       <div class="blog-actions">
-        <button @click="uploadBlog">Submit Post</button>
+        <button class="pill-button" @click="uploadBlog">Submit Post</button>
         <button
-            class="router-button"
+            class="pill-button"
             @click="attemptPreview">
           Post Preview
         </button>
@@ -260,122 +262,150 @@ export default{
 <style scoped lang="scss">
 .create-post {
   position: relative;
-  min-height: 100vh;
-  padding: 3rem 4vw;
-  font-family: 'Inter', sans-serif;
-  background: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg') no-repeat center center;
+  background: url('../assets/images/blogitImageBg2.jpg') no-repeat center;
   background-size: cover;
-  color: #f1f1f1;
+  background-attachment: fixed;
+  color: #333;
+  min-height: 100vh;
+  padding: 2rem 0;
   z-index: 0;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);
     z-index: 0;
+
   }
 
   .container {
     position: relative;
-    z-index: 1;
+    width: 90%;
     max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
+    z-index: 1;
 
-    .invisible {
-      opacity: 0;
-    }
+
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    font-weight: 500;
   }
 
   .blog-title {
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #fff;
-    background: transparent;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #333;
+    background: #fff;
     border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
-    outline: none;
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem 0 0.5rem 1rem;
     width: 100%;
-    max-width: 900px;
-    line-height: 1.2;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem 0;
-    transition: border-color 0.3s ease;
+    outline: none;
+    transition: border-color 0.2s;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.5);
+      color: #aaa;
       font-style: italic;
-      font-weight: 400;
     }
-
     &:focus {
-      border-color: rgba(255, 255, 255, 0.9);
-    }
-
-    &:focus::placeholder {
-      color: rgba(255, 255, 255, 0.2);
+      border-color: #888;
     }
   }
 
+  .pill-button {
+    background: #333;
+    color: #fff;
+    padding: 0.7rem 1.6rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+
+    &:hover {
+      background: #555;
+    }
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .pill-button.button-inactive,
+  .pill-button:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  }
+
+  .outline {
+    background: #fff;
+    color: #333;
+    border: 1px solid #333;
+
+    &:hover {
+      background: #333;
+      color: #fff;
+    }
+  }
+
+
   .upload-row {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
     align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 
-    label,
-    .pill-button {
-      background: #26272b;
-      color: #fff;
-      padding: 0.7rem 1.5rem;
-      border-radius: 999px;
-      border: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s ease;
-
-      &:hover {
-        background: #565656;
-      }
-
-      &.button-inactive {
-        background: #888;
-        color: #eee;
-        cursor: not-allowed;
-      }
-    }
-
-
-    input[type='file'] {
+    input[type="file"] {
       display: none;
     }
 
     .file-name {
-      font-size: 0.85rem;
-      color: #ccc;
+      font-size: 0.9rem;
+      color: #fff;
+      font-style: italic;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+      max-width: 100%;
     }
   }
 
   .category-select {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 0.5rem;
-    color: #fff;
+
+    label {
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
 
     select {
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
       border: 1px solid #ccc;
+      border-radius: 4px;
       background: #fff;
-      color: #000;
-      font-size: 1rem;
-      max-width: 300px;
+      color: #333;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+
+      &:focus {
+        border-color: #888;
+      }
     }
   }
 
@@ -383,60 +413,76 @@ export default{
     :deep(.ql-toolbar) {
       background: #f9f9f9;
       border: 1px solid #ccc;
-      border-radius: 12px 12px 0 0;
-      padding: 0.75rem 1rem;
+      border-radius: 4px 4px 0 0;
+      padding: 0.5rem;
 
       button {
-        border-radius: 6px;
+        border-radius: 4px !important;
         transition: background 0.2s;
-        &:hover {
-          background: #eee;
-        }
+      }
+      button:hover {
+        background: #eee !important;
       }
     }
 
     :deep(.ql-container) {
       border: 1px solid #ccc;
       border-top: none;
-      border-radius: 0 0 12px 12px;
+      border-radius: 0 0 4px 4px;
       background: #fff;
       height: 400px;
       overflow-y: auto;
-      font-size: 1.1rem;
-      color: #000;
+      font-size: 1rem;
+      color: #333;
     }
 
     :deep(.ql-editor) {
-      height: 100%;
-      overflow-y: auto;
+      padding: 1rem;
+      min-height: 300px;
+      line-height: 1.6;
     }
   }
-
 
   .blog-actions {
     display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap;
     gap: 1rem;
+    margin-top: 1rem;
 
-    button,
-    .router-button {
-      background: #26272b;
-      color: #fff;
-      padding: 0.7rem 1.5rem;
-      border-radius: 999px;
-      border: none;
-      font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      width: 95%;
+      gap: 1rem;
+    }
+
+    .blog-title {
+      font-size: 1.6rem;
+      padding-left: 0.8rem;
+    }
+
+    .pill-button {
+      padding: 0.6rem 1.2rem;
       font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s;
+    }
 
-      &:hover {
-        background: #565656;
-      }
+    .upload-row {
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .upload-row .file-name {
+      max-width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .blog-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: stretch;
     }
   }
 }
-
 </style>
+
+
+

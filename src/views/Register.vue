@@ -140,7 +140,7 @@ $white: #fff;
 .form-page {
   position: relative;
   min-height: 100vh;
-  background: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg')
+  background: url('../assets/images/blogitImage2.jpg')
   no-repeat center/cover;
   display: flex;
   align-items: center;
@@ -272,7 +272,7 @@ $white: #fff;
       transition: background 0.2s;
 
       &:hover {
-        background: rgba(255, 255, 255, 1);
+        background: #ffb782;
       }
     }
 

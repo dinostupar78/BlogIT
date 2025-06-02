@@ -1,6 +1,13 @@
 <script>
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
+import newsImage from '../assets/images/blogitImage3.jpg';
+import techImage from '../assets/images/blogitImage4.png';
+import healthImage from '../assets/images/blogitImage5.jpg';
+import lifestyleImage from '../assets/images/blogitImage6.png';
+import financeImage from '../assets/images/blogitImage7.jpg';
+import relationshipsImage from '../assets/images/blogitImage8.png';
+
 
 export default{
   name: 'CategoryCard',
@@ -13,27 +20,27 @@ export default{
       categories: [
         {
           name: "News",
-          image: "https://media.istockphoto.com/id/1345527119/video/graphical-modern-digital-world-news-studio-loop-background.jpg?s=640x640&k=20&c=cr1SYYf7Dix-TgBqiYRLquAmi7TgEE3oZcMUExQ25QY="
+          image: newsImage
         },
         {
           name: "Tech",
-          image: "https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010130.jpg"
+          image: techImage
         },
         {
           name: "Health",
-          image: "https://media.istockphoto.com/id/1441759606/photo/happy-sportswoman-with-earbuds-running-in-the-park.jpg?s=612x612&w=0&k=20&c=_RHiYpQFiZRxESWzCsr8k9SsOr-T-Qj3OcpINB1aVrg="
+          image: healthImage
         },
         {
           name: "Lifestyle",
-          image: "https://img.freepik.com/free-photo/face-hair-lifestyle-person-background_1157-3981.jpg"
+          image: lifestyleImage
         },
         {
           name: "Finance",
-          image: "https://cdn.dribbble.com/userupload/43316533/file/original-0b6bc285d7735953c1d5db136ff97953.png?resize=1024x682&vertical=center"
+          image: financeImage
         },
         {
           name: "Relationships",
-          image: "https://images.squarespace-cdn.com/content/v1/5d533f3bb35a660001611ed6/1393d527-3a37-4f4c-b37b-e7e120e12667/Building+a+Happy%2C+Healthy+Relationship+That+Lasts.png"
+          image: relationshipsImage
         },
       ]
     };

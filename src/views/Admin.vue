@@ -163,7 +163,7 @@ $white: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg') no-repeat center/cover;
+  background: url('../assets/images/blogitImage1.jpg') no-repeat center/cover;
   position: relative;
 
   &::before {
