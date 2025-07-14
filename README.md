@@ -20,7 +20,7 @@
 
 ## Demo
 
-Check out the live demo here: [https://your-demo-link.com](https://your-demo-link.com)
+Check out the live demo here: [https://your-demo-link.com]([https://your-demo-link.com](https://blogit-8c2ac.web.app/))
 
 ---
 
