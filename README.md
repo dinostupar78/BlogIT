@@ -14,7 +14,6 @@
 - [Technologies](#technologies)  
 - [Prerequisites](#prerequisites)  
 - [Installation & Running](#installation--running)  
-- [Deployment](#deployment)  
 
 ---
 
