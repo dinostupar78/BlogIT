@@ -3,7 +3,7 @@
 > **Blogit** is a web application built with Vue.js for easy creation, editing, and display of blog posts, with user authentication and data storage via Firebase.  
 > Final project for the Web Application Development course.
 
-![Blogit Screenshot](https://github.com/username/Blogit/assets/your-screenshot-link.png)
+![Blogit Screenshot]([https://github.com/username/Blogit/assets/your-screenshot-link.png](https://github.com/user-attachments/assets/5528eddf-0f45-4cc2-9e39-6948a520f3f4))
 
 ---
 
@@ -34,7 +34,7 @@
 - **Vue Router**  
 - **Vite**  
 - **JavaScript (ES6+)**  
-- **HTML5 & CSS3**  
+- **HTML5 & SCSS**  
 
 ---
 
